@@ -96,8 +96,8 @@ export default function Layout({ children, darkMode, setDarkMode, cart = [], onC
                                     whileTap={{ scale: 0.95 }}
                                     onClick={() => navigate(item.path)}
                                     className={`capitalize transition-colors duration-200 cursor-pointer font-medium ${location.pathname === item.path
-                                            ? 'text-primary'
-                                            : 'text-foreground hover:text-primary'
+                                        ? 'text-primary'
+                                        : 'text-foreground hover:text-primary'
                                         }`}
                                 >
                                     {item.name}
@@ -138,7 +138,7 @@ export default function Layout({ children, darkMode, setDarkMode, cart = [], onC
                                 <Button
                                     variant="ghost"
                                     size="icon"
-                                    onClick={() => window.location.href = '/admin'}
+                                    onClick={() => navigate('/admin')}
                                     className="relative text-foreground hover:text-primary hover:bg-muted"
                                     title="Admin Login"
                                 >
@@ -214,8 +214,8 @@ export default function Layout({ children, darkMode, setDarkMode, cart = [], onC
                                             setMobileMenuOpen(false);
                                         }}
                                         className={`capitalize text-left text-lg font-medium transition-colors duration-200 py-2 ${location.pathname === item.path
-                                                ? 'text-primary'
-                                                : 'text-foreground hover:text-primary'
+                                            ? 'text-primary'
+                                            : 'text-foreground hover:text-primary'
                                             }`}
                                     >
                                         {item.name}
@@ -227,7 +227,7 @@ export default function Layout({ children, darkMode, setDarkMode, cart = [], onC
                                 <Button
                                     variant="outline"
                                     onClick={() => {
-                                        window.location.href = '/admin';
+                                        navigate('/admin');
                                         setMobileMenuOpen(false);
                                     }}
                                     className="w-full justify-start"
