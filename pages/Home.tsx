@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { getServices, getProjects } from '../utils/supabase/database';
 import { Service as DbService, Project as DbProject } from '../utils/supabase/client';
 import {
-    Code, Users, Award, ArrowRight, ExternalLink, Star, Sparkles,
+    Code, Users, Award, ArrowRight, Star, Sparkles,
     ChevronDown, MapPin, Globe, Zap, Mail
 } from 'lucide-react';
 
@@ -346,7 +346,7 @@ export default function Home() {
             </section>
 
             {/* About Preview Section */}
-            <section id="about-preview" className="py-32 relative">
+            <section id="about-preview" className="py-24 relative">
                 <div className="container mx-auto px-4">
                     <motion.div
                         initial={{ opacity: 0, y: 50 }}
@@ -355,7 +355,7 @@ export default function Home() {
                         viewport={{ once: true }}
                         className="max-w-6xl mx-auto"
                     >
-                        <div className="text-center mb-16">
+                        <div className="text-center mb-12">
                             <motion.h2
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
@@ -447,7 +447,7 @@ export default function Home() {
             </section>
 
             {/* Projects Preview Section */}
-            <section className="py-32 bg-muted/30 relative overflow-hidden">
+            <section className="py-24 bg-muted/30 relative overflow-hidden">
                 <div className="container mx-auto px-4">
                     <motion.div
                         initial={{ opacity: 0, y: 50 }}
@@ -477,7 +477,7 @@ export default function Home() {
                             </motion.p>
                         </div>
 
-                        <div className="grid md:grid-cols-3 gap-8">
+                        <div className="grid md:grid-cols-3 gap-10">
                             {projectsLoading ? (
                                 [...Array(3)].map((_, index) => (
                                     <div key={index} className="animate-pulse">
@@ -567,7 +567,7 @@ export default function Home() {
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.4 }}
                             viewport={{ once: true }}
-                            className="text-center mt-12"
+                            className="text-center mt-20 mb-8"
                         >
                             <Button
                                 size="lg"
@@ -585,7 +585,7 @@ export default function Home() {
             </section>
 
             {/* Services Preview Section */}
-            <section className="py-32 relative">
+            <section className="py-24 relative">
                 <div className="container mx-auto px-4">
                     <motion.div
                         initial={{ opacity: 0, y: 50 }}
@@ -594,13 +594,13 @@ export default function Home() {
                         viewport={{ once: true }}
                         className="max-w-6xl mx-auto"
                     >
-                        <div className="text-center mb-16">
+                        <div className="text-center mb-12">
                             <motion.h2
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8 }}
                                 viewport={{ once: true }}
-                                className="text-4xl md:text-5xl mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
+                                className="text-4xl md:text-5xl mb-8 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
                             >
                                 Services & Solutions
                             </motion.h2>
@@ -609,13 +609,13 @@ export default function Home() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, delay: 0.2 }}
                                 viewport={{ once: true }}
-                                className="text-xl text-muted-foreground max-w-3xl mx-auto"
+                                className="text-xl text-muted-foreground max-w-3xl mx-auto mb-4"
                             >
                                 Professional services designed to elevate your digital presence
                             </motion.p>
                         </div>
 
-                        <div className="grid md:grid-cols-3 gap-8">
+                        <div className="grid md:grid-cols-3 gap-10">
                             {servicesLoading ? (
                                 [...Array(3)].map((_, index) => (
                                     <div key={index} className="animate-pulse">
@@ -682,7 +682,7 @@ export default function Home() {
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.4 }}
                             viewport={{ once: true }}
-                            className="text-center mt-12"
+                            className="text-center mt-20 mb-8"
                         >
                             <Button
                                 size="lg"
@@ -700,7 +700,7 @@ export default function Home() {
             </section>
 
             {/* Contact Preview Section */}
-            <section className="py-32 bg-muted/30 relative overflow-hidden">
+            <section className="py-24 bg-muted/30 relative overflow-hidden">
                 <div className="container mx-auto px-4">
                     <motion.div
                         initial={{ opacity: 0, y: 50 }}
@@ -723,7 +723,7 @@ export default function Home() {
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.2 }}
                             viewport={{ once: true }}
-                            className="text-xl text-muted-foreground mb-12"
+                            className="text-xl text-muted-foreground mb-16"
                         >
                             Ready to bring your digital vision to life? Let's connect and discuss your next project
                         </motion.p>
@@ -746,6 +746,206 @@ export default function Home() {
                                 </motion.div>
                             </Button>
                         </motion.div>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* Testimonials Carousel Section */}
+            <section className="py-20 bg-muted/30 relative overflow-hidden">
+                <div className="container mx-auto px-4 mb-16">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                        viewport={{ once: true }}
+                        className="text-center"
+                    >
+                        <h2 className="text-3xl md:text-4xl mb-4 font-semibold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                            What Clients Say
+                        </h2>
+                        <p className="text-muted-foreground text-sm">Trusted by clients worldwide</p>
+                    </motion.div>
+                </div>
+
+                <div className="relative">
+                    <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10" />
+                    <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10" />
+
+                    <motion.div
+                        className="flex gap-6"
+                        animate={{
+                            x: ["0%", "-33.33%"],
+                        }}
+                        transition={{
+                            x: {
+                                repeat: Infinity,
+                                repeatType: "loop",
+                                duration: 40,
+                                ease: "linear",
+                            },
+                        }}
+                        style={{ willChange: "transform" }}
+                    >
+                        {[...Array(6)].map((_, setIndex) => (
+                            <div key={setIndex} className="flex gap-6 shrink-0">
+                                {[
+                                    {
+                                        name: "Bilal Andersen",
+                                        role: "CEO",
+                                        company: "Tech Solutions",
+                                        content: "Perfekt organiseret fra start til slut. Den dansk-talende guide gjorde det hele så nemt at forstå.",
+                                        rating: 5,
+                                    },
+                                    {
+                                        name: "Amina Nielsen",
+                                        role: "Marketing Director",
+                                        company: "Digital Agency",
+                                        content: "En uforglemmelig spirituel rejse! Alt var inkluderet, og jeg behøvede ikke bekymre mig om noget.",
+                                        rating: 5,
+                                    },
+                                    {
+                                        name: "Sarah Johnson",
+                                        role: "Product Manager",
+                                        company: "Innovation Labs",
+                                        content: "Outstanding work! The attention to detail and commitment to quality exceeded our expectations.",
+                                        rating: 5,
+                                    },
+                                    {
+                                        name: "Ahmed Hassan",
+                                        role: "CTO",
+                                        company: "StartUp Inc",
+                                        content: "Professional, reliable, and delivers on time. Working with this team has been a game-changer.",
+                                        rating: 5,
+                                    },
+                                    {
+                                        name: "Lisa Chen",
+                                        role: "Designer",
+                                        company: "Creative Studio",
+                                        content: "Incredible creativity and technical expertise. The final product was beyond what we imagined.",
+                                        rating: 5,
+                                    },
+                                    {
+                                        name: "Mohammed Ali",
+                                        role: "Founder",
+                                        company: "E-commerce Plus",
+                                        content: "From concept to deployment, everything was handled professionally. Great communication!",
+                                        rating: 5,
+                                    },
+                                ].map((testimonial, index) => (
+                                    <div
+                                        key={`${setIndex}-${index}`}
+                                        className="w-96 shrink-0 bg-card border border-border rounded-2xl p-8 flex flex-col justify-between shadow-xl hover:shadow-2xl transition-all hover:scale-105 relative overflow-hidden"
+                                    >
+                                        {/* Large Quote Mark */}
+                                        <div className="absolute top-4 right-6 text-8xl font-serif text-muted-foreground/10 leading-none">
+                                            "
+                                        </div>
+
+                                        <div className="relative z-10">
+                                            {/* Stars */}
+                                            <div className="flex gap-1 mb-6">
+                                                {[...Array(testimonial.rating)].map((_, i) => (
+                                                    <Star key={i} className="w-5 h-5 fill-yellow-500 text-yellow-500" />
+                                                ))}
+                                            </div>
+
+                                            {/* Testimonial Text */}
+                                            <p className="text-foreground text-base leading-relaxed mb-8 italic">
+                                                "{testimonial.content}"
+                                            </p>
+                                        </div>
+
+                                        {/* Author Info */}
+                                        <div className="flex items-center gap-4 relative z-10">
+                                            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center text-gray-900 font-bold text-xl shadow-lg">
+                                                {testimonial.name.charAt(0)}
+                                            </div>
+                                            <div>
+                                                <h4 className="font-semibold text-foreground text-base">{testimonial.name}</h4>
+                                                <p className="text-sm text-muted-foreground">{testimonial.role} • {new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* Trusted Companies Section */}
+            <section className="py-16 bg-background relative overflow-hidden">
+                <div className="container mx-auto px-4 mb-16">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8 }}
+                        viewport={{ once: true }}
+                        className="text-center"
+                    >
+                        <h2 className="text-2xl md:text-3xl mb-4 text-foreground font-semibold">Trusted By</h2>
+                        <p className="text-muted-foreground text-sm">Companies that believe in quality</p>
+                    </motion.div>
+                </div>
+
+                <div className="relative">
+                    <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10" />
+                    <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10" />
+
+                    <motion.div
+                        className="flex gap-8 items-center py-6"
+                        animate={{
+                            x: ["0%", "-33.33%"],
+                        }}
+                        transition={{
+                            x: {
+                                repeat: Infinity,
+                                repeatType: "loop",
+                                duration: 35,
+                                ease: "linear",
+                            },
+                        }}
+                        style={{ willChange: "transform" }}
+                    >
+                        {[...Array(6)].map((_, setIndex) => (
+                            <div key={setIndex} className="flex gap-8 items-center shrink-0">
+                                {[
+                                    { name: "Microsoft" },
+                                    { name: "Google" },
+                                    { name: "Amazon" },
+                                    { name: "Meta" },
+                                    { name: "Apple" },
+                                    { name: "Netflix" },
+                                    { name: "Tesla" },
+                                    { name: "Spotify" },
+                                    { name: "Adobe" },
+                                    { name: "IBM" },
+                                ].map((company, index) => (
+                                    <div
+                                        key={`${setIndex}-${index}`}
+                                        className="shrink-0"
+                                    >
+                                        <div className="
+                                            px-12 py-7 rounded-2xl
+                                            bg-card/80 
+                                            backdrop-blur-sm
+                                            transition-all duration-300
+                                            hover:bg-card
+                                        ">
+                                            <div className="
+                                                text-xl font-semibold 
+                                                text-muted-foreground
+                                                whitespace-nowrap
+                                                transition-colors duration-300
+                                                hover:text-foreground
+                                            ">
+                                                {company.name}
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ))}
                     </motion.div>
                 </div>
             </section>

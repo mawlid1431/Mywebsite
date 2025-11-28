@@ -50,6 +50,7 @@ export default function Layout({ children, darkMode, setDarkMode, cart = [], onC
         { name: 'About', path: '/about' },
         { name: 'Projects', path: '/projects' },
         { name: 'Services', path: '/services' },
+        { name: 'Testimonials', path: '/testimonials' },
         { name: 'Contact', path: '/contact' }
     ];
 
@@ -291,12 +292,40 @@ export default function Layout({ children, darkMode, setDarkMode, cart = [], onC
                                 </motion.a>
                             ))}
                         </div>
-                        <motion.p
+                        <motion.div
                             initial={{ opacity: 0 }}
                             whileInView={{ opacity: 1 }}
                             transition={{ duration: 0.8, delay: 0.2 }}
                             viewport={{ once: true }}
-                            className="text-muted-foreground"
+                            className="flex justify-center gap-6 mb-4"
+                        >
+                            <button
+                                onClick={() => navigate('/faq')}
+                                className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                            >
+                                FAQ
+                            </button>
+                            <span className="text-muted-foreground">•</span>
+                            <button
+                                onClick={() => navigate('/privacy')}
+                                className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                            >
+                                Privacy Policy
+                            </button>
+                            <span className="text-muted-foreground">•</span>
+                            <button
+                                onClick={() => navigate('/terms')}
+                                className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                            >
+                                Terms & Conditions
+                            </button>
+                        </motion.div>
+                        <motion.p
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            transition={{ duration: 0.8, delay: 0.3 }}
+                            viewport={{ once: true }}
+                            className="text-muted-foreground text-sm"
                         >
                             © 2024 Mowlid Mohamud. Crafted with passion and innovation.
                         </motion.p>

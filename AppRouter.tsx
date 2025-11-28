@@ -15,6 +15,10 @@ import About from './pages/About';
 import Projects from './pages/Projects';
 import Services from './pages/Services';
 import Contact from './pages/Contact';
+import Testimonials from './pages/Testimonials';
+import FAQ from './pages/FAQ';
+import Privacy from './pages/Privacy';
+import Terms from './pages/Terms';
 
 // Components
 import Layout from './components/Layout';
@@ -124,6 +128,30 @@ const AppRouter: React.FC = () => {
         <Route path="/contact" element={
           <Layout darkMode={darkMode} setDarkMode={setDarkMode} cart={cart} onCartClick={() => setShowCart(true)}>
             <Contact />
+          </Layout>
+        } />
+
+        <Route path="/testimonials" element={
+          <Layout darkMode={darkMode} setDarkMode={setDarkMode} cart={cart} onCartClick={() => setShowCart(true)}>
+            <Testimonials />
+          </Layout>
+        } />
+
+        <Route path="/faq" element={
+          <Layout darkMode={darkMode} setDarkMode={setDarkMode} cart={cart} onCartClick={() => setShowCart(true)}>
+            <FAQ />
+          </Layout>
+        } />
+
+        <Route path="/privacy" element={
+          <Layout darkMode={darkMode} setDarkMode={setDarkMode} cart={cart} onCartClick={() => setShowCart(true)}>
+            <Privacy />
+          </Layout>
+        } />
+
+        <Route path="/terms" element={
+          <Layout darkMode={darkMode} setDarkMode={setDarkMode} cart={cart} onCartClick={() => setShowCart(true)}>
+            <Terms />
           </Layout>
         } />
 
