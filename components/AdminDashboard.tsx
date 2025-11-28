@@ -814,20 +814,23 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                 <p className="text-muted-foreground mt-2">Loading services...</p>
               </div>
             ) : (
-              <div className="grid gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {services.map((service) => (
-                  <Card key={service.id} className="bg-card/50 border-border">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0">
-                      <div>
-                        <CardTitle className="text-foreground">{service.name}</CardTitle>
-                        <CardDescription className="text-muted-foreground">
-                          {service.price}
-                        </CardDescription>
-                        <CardDescription className="text-xs text-muted-foreground/70">
-                          Created: {service.created_at ? new Date(service.created_at).toLocaleDateString() : 'N/A'}
-                        </CardDescription>
-                      </div>
-                      <div className="flex space-x-2">
+                  <Card key={service.id} className="bg-card/50 border-border flex flex-col">
+                    <CardHeader className="space-y-2">
+                      <CardTitle className="text-foreground text-base line-clamp-1">{service.name}</CardTitle>
+                      <CardDescription className="text-sm text-muted-foreground font-semibold">
+                        {service.price}
+                      </CardDescription>
+                      <CardDescription className="text-xs text-muted-foreground/70">
+                        {service.created_at ? new Date(service.created_at).toLocaleDateString() : 'N/A'}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex-1">
+                      <p className="text-sm text-muted-foreground line-clamp-3">{service.description}</p>
+                    </CardContent>
+                    <CardContent className="pt-0">
+                      <div className="flex gap-2 justify-end">
                         <Button
                           onClick={() => openServiceDialog(service)}
                           size="sm"
@@ -842,11 +845,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-sm text-muted-foreground">
-                        <p className="line-clamp-2">{service.description}</p>
                       </div>
                     </CardContent>
                   </Card>
@@ -880,27 +878,32 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                 <p className="text-muted-foreground mt-2">Loading projects...</p>
               </div>
             ) : (
-              <div className="grid gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                 {projects.map((project) => (
-                  <Card key={project.id} className="bg-card/50 border-border">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0">
-                      <div>
-                        <CardTitle className="text-foreground flex items-center gap-2">
+                  <Card key={project.id} className="bg-card/50 border-border flex flex-col">
+                    <CardHeader className="space-y-2">
+                      <div className="flex items-start justify-between gap-2">
+                        <CardTitle className="text-foreground text-base line-clamp-1">
                           {project.name}
-                          {project.is_live && (
-                            <Badge className="bg-green-600 text-white">
-                              Live
-                            </Badge>
-                          )}
                         </CardTitle>
-                        <CardDescription className="text-muted-foreground">
-                          {project.technology}
-                        </CardDescription>
-                        <CardDescription className="text-xs text-muted-foreground/70">
-                          Created: {project.created_at ? new Date(project.created_at).toLocaleDateString() : 'N/A'}
-                        </CardDescription>
+                        {project.is_live && (
+                          <Badge className="bg-green-600 text-white shrink-0">
+                            Live
+                          </Badge>
+                        )}
                       </div>
-                      <div className="flex space-x-2">
+                      <CardDescription className="text-sm text-muted-foreground line-clamp-1">
+                        {project.technology}
+                      </CardDescription>
+                      <CardDescription className="text-xs text-muted-foreground/70">
+                        {project.created_at ? new Date(project.created_at).toLocaleDateString() : 'N/A'}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex-1">
+                      <p className="text-sm text-muted-foreground line-clamp-3">{project.description}</p>
+                    </CardContent>
+                    <CardContent className="pt-0">
+                      <div className="flex gap-2 justify-end">
                         {project.link && (
                           <Button
                             onClick={() => window.open(project.link, '_blank')}
@@ -924,11 +927,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-sm text-muted-foreground">
-                        <p className="line-clamp-2">{project.description}</p>
                       </div>
                     </CardContent>
                   </Card>
