@@ -490,7 +490,7 @@ export default function Home() {
                                         </Card>
                                     </div>
                                 ))
-                            ) : projects.slice(-3).map((project, index) => (
+                            ) : projects.slice(0, 3).map((project, index) => (
                                 <motion.div
                                     key={project.name}
                                     initial={{ opacity: 0, y: 50 }}
