@@ -499,9 +499,9 @@ export default function Home() {
                                     whileHover={{ y: -10 }}
                                     viewport={{ once: true }}
                                 >
-                                    <Card className="overflow-hidden border-border/50 bg-card/50 backdrop-blur-sm group h-full">
-                                        <div className="relative aspect-video overflow-hidden cursor-pointer"
-                                            onClick={() => project.url !== '#' && window.open(project.url, '_blank')}>
+                                    <Card className="overflow-hidden border-border/50 bg-card/50 backdrop-blur-sm group h-full cursor-pointer"
+                                        onClick={() => navigate('/projects')}>
+                                        <div className="relative aspect-video overflow-hidden">
                                             <motion.img
                                                 src={project.image}
                                                 alt={project.name}
@@ -521,7 +521,7 @@ export default function Home() {
                                                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                                                     className="w-12 h-12 bg-primary rounded-full flex items-center justify-center shadow-lg"
                                                 >
-                                                    <ExternalLink className="w-6 h-6 text-primary-foreground" />
+                                                    <ArrowRight className="w-6 h-6 text-primary-foreground" />
                                                 </motion.div>
                                             </motion.div>
 
