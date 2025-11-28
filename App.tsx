@@ -10,15 +10,15 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { toast, Toaster } from 'sonner';
 import { getServices, getProjects, addOrder } from './utils/supabase/database';
 import { Service as DbService, Project as DbProject } from './utils/supabase/client';
-import { 
-  Github, 
-  Linkedin, 
-  Mail, 
-  Phone, 
-  MapPin, 
-  ExternalLink, 
-  Moon, 
-  Sun, 
+import {
+  Github,
+  Linkedin,
+  Mail,
+  Phone,
+  MapPin,
+  ExternalLink,
+  Moon,
+  Sun,
   MessageCircle,
   ShoppingCart,
   Trash2,
@@ -254,8 +254,8 @@ export default function App() {
     setCart(prev => {
       const existing = prev.find(item => item.id === service.id);
       if (existing) {
-        return prev.map(item => 
-          item.id === service.id 
+        return prev.map(item =>
+          item.id === service.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
@@ -312,7 +312,7 @@ export default function App() {
     }
 
     const orderId = `ORD-${Date.now()}`;
-    
+
     const orderData: OrderConfirmation = {
       orderId,
       customer: {
@@ -359,11 +359,11 @@ export default function App() {
 
       // Send order notification
       await sendOrderNotification(orderData);
-      
+
       // Set order details and show confirmation
       setOrderDetails(orderData);
       setShowOrderConfirmation(true);
-      
+
       // Clear cart and close checkout
       setCart([]);
       setShowCheckout(false);
@@ -371,7 +371,7 @@ export default function App() {
       setCheckoutData({
         fullName: '', email: '', phone: '', address: '', city: '', postalCode: '', country: ''
       });
-      
+
       toast.success('Order placed successfully!');
     } catch (error) {
       console.error('Error saving order:', error);
@@ -385,10 +385,10 @@ export default function App() {
       toast.error('Please fill in all required fields');
       return;
     }
-    
+
     // Send contact notification
     await sendContactNotification(contactForm);
-    
+
     // Clear the form
     setContactForm({ name: '', email: '', phone: '', message: '' });
     toast.success('Message sent successfully!');
@@ -401,8 +401,8 @@ export default function App() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Toaster />
-      
-      
+
+
       {/* Animated Background Elements */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-20 left-10 w-2 h-2 bg-primary/20 rounded-full animate-pulse"></div>
@@ -412,7 +412,7 @@ export default function App() {
       </div>
 
       {/* Header */}
-      <motion.header 
+      <motion.header
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
@@ -420,13 +420,13 @@ export default function App() {
       >
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <motion.div 
+            <motion.div
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               className="flex items-center space-x-3 cursor-pointer"
             >
-              <motion.div 
+              <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                 className="w-10 h-10 bg-gradient-to-br from-primary to-primary/70 rounded-full flex items-center justify-center shadow-lg"
@@ -437,7 +437,7 @@ export default function App() {
                 Mowlid Mohamud
               </span>
             </motion.div>
-            
+
             <nav className="hidden md:flex items-center space-x-8">
               {['about', 'experience', 'projects', 'services', 'contact'].map((item) => (
                 <motion.button
@@ -494,7 +494,7 @@ export default function App() {
                   <User className="h-4 w-4" />
                 </Button>
               </motion.div>
-              
+
               {/* Cart Button - Hidden on mobile */}
               <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="hidden sm:block">
                 <Button
@@ -537,7 +537,7 @@ export default function App() {
               className="fixed inset-0 bg-black/50 z-40 md:hidden"
               onClick={() => setMobileMenuOpen(false)}
             />
-            
+
             {/* Mobile Menu */}
             <motion.div
               initial={{ x: "100%" }}
@@ -590,7 +590,7 @@ export default function App() {
                     <User className="h-4 w-4 mr-2" />
                     Admin Login
                   </Button>
-                  
+
                   <Button
                     variant="outline"
                     onClick={() => setShowCart(true)}
@@ -616,7 +616,7 @@ export default function App() {
         {/* Animated Background Orbs */}
         <div className="absolute inset-0">
           <motion.div
-            animate={{ 
+            animate={{
               x: [0, 100, 0],
               y: [0, -50, 0],
               scale: [1, 1.2, 1],
@@ -626,7 +626,7 @@ export default function App() {
             className="absolute top-1/4 left-1/4 w-64 h-64 bg-primary/10 rounded-full blur-3xl"
           />
           <motion.div
-            animate={{ 
+            animate={{
               x: [0, -80, 0],
               y: [0, 60, 0],
               scale: [1, 0.8, 1],
@@ -662,7 +662,7 @@ export default function App() {
                     </motion.div>
                     <span className="text-primary dark:text-primary">Welcome to my digital world</span>
                   </div>
-                  
+
                   <h1 className="text-4xl md:text-6xl lg:text-7xl">
                     <span className="block">
                       <motion.span
@@ -735,8 +735,8 @@ export default function App() {
                   className="flex flex-wrap gap-4"
                 >
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <Button 
-                      size="lg" 
+                    <Button
+                      size="lg"
                       className="bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary group"
                       onClick={() => scrollToSection('contact')}
                     >
@@ -751,10 +751,10 @@ export default function App() {
                       </motion.div>
                     </Button>
                   </motion.div>
-                  
+
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                    <Button 
-                      variant="outline" 
+                    <Button
+                      variant="outline"
                       size="lg"
                       className="border-primary/20 hover:bg-primary/5"
                       onClick={() => scrollToSection('projects')}
@@ -780,7 +780,7 @@ export default function App() {
                     transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
                     className="absolute -inset-4 rounded-full bg-gradient-to-r from-primary via-secondary to-primary opacity-20 blur-sm"
                   />
-                  
+
                   {/* Second Ring */}
                   <motion.div
                     animate={{ rotate: -360 }}
@@ -791,22 +791,22 @@ export default function App() {
                   {/* Profile Image Container */}
                   <motion.div
                     whileHover={{ scale: 1.05 }}
-                    animate={{ 
+                    animate={{
                       y: [0, -10, 0],
                       rotateY: [0, 5, 0, -5, 0]
                     }}
-                    transition={{ 
+                    transition={{
                       y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
                       rotateY: { duration: 6, repeat: Infinity, ease: "easeInOut" }
                     }}
                     className="relative w-80 h-80 rounded-full overflow-hidden border-4 border-background shadow-2xl"
                   >
-                    <img 
-                      src={profileImage1} 
+                    <img
+                      src={profileImage1}
                       alt="Mowlid Mohamud"
                       className="w-full h-full object-cover"
                     />
-                    
+
                     {/* Overlay Glow */}
                     <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-secondary/20" />
                   </motion.div>
@@ -890,7 +890,7 @@ export default function App() {
             className="max-w-6xl mx-auto"
           >
             <div className="text-center mb-16">
-              <motion.h2 
+              <motion.h2
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
@@ -909,7 +909,7 @@ export default function App() {
                 Passionate about creating digital solutions that make a difference in communities worldwide
               </motion.p>
             </div>
-            
+
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
                 {
@@ -952,7 +952,7 @@ export default function App() {
                     <CardContent>
                       <p className="text-muted-foreground leading-relaxed">{item.description}</p>
                     </CardContent>
-                    
+
                     {/* Hover Effect */}
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </Card>
@@ -972,24 +972,23 @@ export default function App() {
                 <motion.div
                   whileHover={{ scale: 1.08, rotateY: 5 }}
                   whileTap={{ scale: 0.98 }}
-                  animate={{ 
+                  animate={{
                     y: [0, -8, 0],
                     rotateX: [0, 2, 0, -2, 0]
                   }}
-                  transition={{ 
+                  transition={{
                     y: { duration: 3, repeat: Infinity, ease: "easeInOut" },
-                    rotateX: { duration: 5, repeat: Infinity, ease: "easeInOut" },
-                    hover: { duration: 0.3 }
+                    rotateX: { duration: 5, repeat: Infinity, ease: "easeInOut" }
                   }}
                   className="w-80 h-96 rounded-2xl overflow-hidden shadow-2xl border-4 border-background cursor-pointer"
                 >
-                  <img 
-                    src={profileImage2} 
+                  <img
+                    src={profileImage2}
                     alt="Mowlid Mohamud in office"
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-transparent" />
-                  
+
                   {/* Hover overlay */}
                   <motion.div
                     initial={{ opacity: 0 }}
@@ -1006,7 +1005,7 @@ export default function App() {
                     </motion.div>
                   </motion.div>
                 </motion.div>
-                
+
                 {/* Floating Badge */}
                 <motion.div
                   initial={{ opacity: 0, x: 50 }}
@@ -1042,7 +1041,7 @@ export default function App() {
             className="max-w-6xl mx-auto"
           >
             <div className="text-center mb-16">
-              <motion.h2 
+              <motion.h2
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
@@ -1052,7 +1051,7 @@ export default function App() {
                 Education & Learning
               </motion.h2>
             </div>
-            
+
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
                 {
@@ -1126,14 +1125,14 @@ export default function App() {
                     </CardHeader>
                     <CardContent>
                       <p className="text-muted-foreground leading-relaxed mb-4">{edu.institution}</p>
-                      <Badge 
+                      <Badge
                         variant={edu.status === 'Current' ? 'default' : 'secondary'}
                         className="mb-2"
                       >
                         {edu.status}
                       </Badge>
                     </CardContent>
-                    
+
                     {/* Hover Effect */}
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </Card>
@@ -1155,7 +1154,7 @@ export default function App() {
             className="max-w-6xl mx-auto"
           >
             <div className="text-center mb-16">
-              <motion.h2 
+              <motion.h2
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
@@ -1165,7 +1164,7 @@ export default function App() {
                 Experience & Social Impact
               </motion.h2>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
               {[
                 {
@@ -1250,7 +1249,7 @@ export default function App() {
                         </div>
                       </div>
                     </CardHeader>
-                    
+
                     {/* Featured Badge for Somaliland Standard */}
                     {exp.link && (
                       <motion.div
@@ -1264,7 +1263,7 @@ export default function App() {
                         </Badge>
                       </motion.div>
                     )}
-                    
+
                     {/* Hover Effect */}
                     <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </Card>
@@ -1286,7 +1285,7 @@ export default function App() {
             className="max-w-7xl mx-auto"
           >
             <div className="text-center mb-16">
-              <motion.h2 
+              <motion.h2
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
@@ -1305,7 +1304,7 @@ export default function App() {
                 Successful projects that I delivered for my clients
               </motion.p>
             </div>
-            
+
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {projectsLoading ? (
                 // Loading skeleton for projects
@@ -1329,85 +1328,85 @@ export default function App() {
                 ))
               ) : projects.length > 0 ? (
                 projects.map((project, index) => (
-                <motion.div
-                  key={project.name}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.1 }}
-                  whileHover={{ y: -10 }}
-                  viewport={{ once: true }}
-                >
-                  <Card className="overflow-hidden border-border/50 bg-card/50 backdrop-blur-sm group h-full">
-                    <div className="relative aspect-video overflow-hidden cursor-pointer"
-                         onClick={() => project.url !== '#' && window.open(project.url, '_blank')}>
-                      <motion.img 
-                        src={project.image} 
-                        alt={project.name}
-                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        whileHover={{ scale: 1.1 }}
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      
-                      {/* Hover Overlay */}
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        whileHover={{ opacity: 1 }}
-                        className="absolute inset-0 bg-primary/20 flex items-center justify-center"
-                      >
+                  <motion.div
+                    key={project.name}
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: index * 0.1 }}
+                    whileHover={{ y: -10 }}
+                    viewport={{ once: true }}
+                  >
+                    <Card className="overflow-hidden border-border/50 bg-card/50 backdrop-blur-sm group h-full">
+                      <div className="relative aspect-video overflow-hidden cursor-pointer"
+                        onClick={() => project.url !== '#' && window.open(project.url, '_blank')}>
+                        <motion.img
+                          src={project.image}
+                          alt={project.name}
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          whileHover={{ scale: 1.1 }}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                        {/* Hover Overlay */}
                         <motion.div
-                          initial={{ scale: 0 }}
-                          whileHover={{ scale: 1 }}
-                          transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                          className="w-12 h-12 bg-primary rounded-full flex items-center justify-center shadow-lg"
+                          initial={{ opacity: 0 }}
+                          whileHover={{ opacity: 1 }}
+                          className="absolute inset-0 bg-primary/20 flex items-center justify-center"
                         >
-                          <ExternalLink className="w-6 h-6 text-primary-foreground" />
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            whileHover={{ scale: 1 }}
+                            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                            className="w-12 h-12 bg-primary rounded-full flex items-center justify-center shadow-lg"
+                          >
+                            <ExternalLink className="w-6 h-6 text-primary-foreground" />
+                          </motion.div>
                         </motion.div>
-                      </motion.div>
-                      
-                      {/* Live Badge for DEH project */}
-                      {project.url !== '#' && (
-                        <motion.div
-                          initial={{ opacity: 0, scale: 0.8 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          className="absolute top-4 right-4"
-                        >
-                          <Badge className="bg-green-500 text-white px-3 py-1 shadow-lg">
-                            <Globe className="w-3 h-3 mr-1" />
-                            Live
-                          </Badge>
-                        </motion.div>
-                      )}
-                    </div>
-                    
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2 group-hover:text-primary transition-colors">
-                        {project.name}
-                        <motion.div
-                          animate={{ x: [0, 5, 0] }}
-                          transition={{ duration: 2, repeat: Infinity }}
-                        >
-                          <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </motion.div>
-                      </CardTitle>
-                      <CardDescription className="leading-relaxed">
-                        {project.description}
-                      </CardDescription>
-                    </CardHeader>
-                    
-                    <CardFooter>
-                      <div className="flex flex-wrap gap-2">
-                        {project.tech.map((tech) => (
-                          <Badge key={tech} variant="outline" className="text-xs">
-                            {tech}
-                          </Badge>
-                        ))}
+
+                        {/* Live Badge for DEH project */}
+                        {project.url !== '#' && (
+                          <motion.div
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            className="absolute top-4 right-4"
+                          >
+                            <Badge className="bg-green-500 text-white px-3 py-1 shadow-lg">
+                              <Globe className="w-3 h-3 mr-1" />
+                              Live
+                            </Badge>
+                          </motion.div>
+                        )}
                       </div>
-                    </CardFooter>
-                    
-                    {/* Hover Effect */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                  </Card>
-                </motion.div>
+
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2 group-hover:text-primary transition-colors">
+                          {project.name}
+                          <motion.div
+                            animate={{ x: [0, 5, 0] }}
+                            transition={{ duration: 2, repeat: Infinity }}
+                          >
+                            <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </motion.div>
+                        </CardTitle>
+                        <CardDescription className="leading-relaxed">
+                          {project.description}
+                        </CardDescription>
+                      </CardHeader>
+
+                      <CardFooter>
+                        <div className="flex flex-wrap gap-2">
+                          {project.tech.map((tech) => (
+                            <Badge key={tech} variant="outline" className="text-xs">
+                              {tech}
+                            </Badge>
+                          ))}
+                        </div>
+                      </CardFooter>
+
+                      {/* Hover Effect */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                    </Card>
+                  </motion.div>
                 ))
               ) : (
                 // Empty state for projects
@@ -1431,7 +1430,7 @@ export default function App() {
             className="max-w-6xl mx-auto"
           >
             <div className="text-center mb-16">
-              <motion.h2 
+              <motion.h2
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
@@ -1450,7 +1449,7 @@ export default function App() {
                 Professional services designed to elevate your digital presence and business success
               </motion.p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center max-w-4xl mx-auto">
               {servicesLoading ? (
                 // Loading skeleton for services
@@ -1471,86 +1470,86 @@ export default function App() {
                 ))
               ) : services.length > 0 ? (
                 services.map((service, index) => (
-                <motion.div
-                  key={service.id}
-                  initial={{ opacity: 0, y: 50 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8, delay: index * 0.1 }}
-                  whileHover={{ y: -10, scale: 1.02 }}
-                  viewport={{ once: true }}
-                  className="cursor-pointer w-full max-w-sm mx-auto"
-                  onClick={() => {
-                    setSelectedService(service);
-                    setShowServiceDetails(true);
-                  }}
-                >
-                  <Card className="border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden group h-full hover:border-primary/50 transition-colors">
-                    <CardHeader>
-                      <div className="flex justify-between items-start mb-4">
-                        <Badge 
-                          variant="secondary" 
-                          className="bg-primary/10 text-primary border-primary/20"
-                        >
-                          {service.category}
-                        </Badge>
-                        <motion.div
-                          whileHover={{ scale: 1.2, rotate: 15 }}
-                          className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center"
-                        >
-                          <Star className="w-4 h-4 text-white" />
-                        </motion.div>
-                      </div>
-                      <CardTitle className="group-hover:text-primary transition-colors">
-                        {service.title}
-                      </CardTitle>
-                      <CardDescription className="leading-relaxed line-clamp-3">
-                        {service.description}
-                      </CardDescription>
-                    </CardHeader>
-                    
-                    <CardContent>
-                      <motion.div 
-                        className="text-2xl mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
-                        whileHover={{ scale: 1.1 }}
-                      >
-                        {service.price}
-                      </motion.div>
-                    </CardContent>
-                    
-                    <CardFooter>
-                      <motion.div
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="w-full"
-                      >
-                        <Button 
-                          onClick={(e) => {
-                            e.stopPropagation(); // Prevent card click
-                            addToCart(service);
-                          }}
-                          className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary group"
-                        >
-                          <ShoppingCart className="w-4 h-4 mr-2" />
-                          Quick Add
-                          <motion.div
-                            className="ml-auto opacity-0 group-hover:opacity-100"
-                            animate={{ x: [0, 5, 0] }}
-                            transition={{ duration: 1.5, repeat: Infinity }}
+                  <motion.div
+                    key={service.id}
+                    initial={{ opacity: 0, y: 50 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, delay: index * 0.1 }}
+                    whileHover={{ y: -10, scale: 1.02 }}
+                    viewport={{ once: true }}
+                    className="cursor-pointer w-full max-w-sm mx-auto"
+                    onClick={() => {
+                      setSelectedService(service);
+                      setShowServiceDetails(true);
+                    }}
+                  >
+                    <Card className="border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden group h-full hover:border-primary/50 transition-colors">
+                      <CardHeader>
+                        <div className="flex justify-between items-start mb-4">
+                          <Badge
+                            variant="secondary"
+                            className="bg-primary/10 text-primary border-primary/20"
                           >
-                            <ArrowRight className="w-4 h-4" />
+                            {service.category}
+                          </Badge>
+                          <motion.div
+                            whileHover={{ scale: 1.2, rotate: 15 }}
+                            className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center"
+                          >
+                            <Star className="w-4 h-4 text-white" />
                           </motion.div>
-                        </Button>
-                        
-                        <div className="text-center mt-2 text-xs text-muted-foreground">
-                          Click card for details
                         </div>
-                      </motion.div>
-                    </CardFooter>
-                    
-                    {/* Hover Effect */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                  </Card>
-                </motion.div>
+                        <CardTitle className="group-hover:text-primary transition-colors">
+                          {service.title}
+                        </CardTitle>
+                        <CardDescription className="leading-relaxed line-clamp-3">
+                          {service.description}
+                        </CardDescription>
+                      </CardHeader>
+
+                      <CardContent>
+                        <motion.div
+                          className="text-2xl mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
+                          whileHover={{ scale: 1.1 }}
+                        >
+                          {service.price}
+                        </motion.div>
+                      </CardContent>
+
+                      <CardFooter>
+                        <motion.div
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="w-full"
+                        >
+                          <Button
+                            onClick={(e) => {
+                              e.stopPropagation(); // Prevent card click
+                              addToCart(service);
+                            }}
+                            className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary group"
+                          >
+                            <ShoppingCart className="w-4 h-4 mr-2" />
+                            Quick Add
+                            <motion.div
+                              className="ml-auto opacity-0 group-hover:opacity-100"
+                              animate={{ x: [0, 5, 0] }}
+                              transition={{ duration: 1.5, repeat: Infinity }}
+                            >
+                              <ArrowRight className="w-4 h-4" />
+                            </motion.div>
+                          </Button>
+
+                          <div className="text-center mt-2 text-xs text-muted-foreground">
+                            Click card for details
+                          </div>
+                        </motion.div>
+                      </CardFooter>
+
+                      {/* Hover Effect */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+                    </Card>
+                  </motion.div>
                 ))
               ) : (
                 // Empty state for services
@@ -1574,7 +1573,7 @@ export default function App() {
             className="max-w-6xl mx-auto"
           >
             <div className="text-center mb-16">
-              <motion.h2 
+              <motion.h2
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
@@ -1593,7 +1592,7 @@ export default function App() {
                 Ready to bring your digital vision to life? Let's connect and discuss your next project
               </motion.p>
             </div>
-            
+
             <div className="grid lg:grid-cols-2 gap-12">
               {/* Contact Information */}
               <motion.div
@@ -1607,15 +1606,15 @@ export default function App() {
                 <div className="space-y-6">
                   {[
                     { icon: MapPin, label: 'Location', value: 'Alor Setar, Kedah, Malaysia' },
-                    { 
-                      icon: Mail, 
-                      label: 'Email', 
-                      value: ['malitmohamud@gmail.com', 'mowlid@malito.tech'] 
+                    {
+                      icon: Mail,
+                      label: 'Email',
+                      value: ['malitmohamud@gmail.com', 'mowlid@malito.tech']
                     },
-                    { 
-                      icon: Phone, 
-                      label: 'Phone', 
-                      value: ['Malaysia: +6017 258 9925', 'Somaliland: +252 63 423 5966'] 
+                    {
+                      icon: Phone,
+                      label: 'Phone',
+                      value: ['Malaysia: +6017 258 9925', 'Somaliland: +252 63 423 5966']
                     }
                   ].map((contact, index) => (
                     <motion.div
@@ -1647,7 +1646,7 @@ export default function App() {
                   ))}
                 </div>
               </motion.div>
-              
+
               {/* Contact Form */}
               <motion.div
                 initial={{ opacity: 0, x: 50 }}
@@ -1672,7 +1671,7 @@ export default function App() {
                           className="bg-background/50"
                         />
                       </motion.div>
-                      
+
                       <motion.div whileFocus={{ scale: 1.02 }}>
                         <Input
                           type="email"
@@ -1682,7 +1681,7 @@ export default function App() {
                           className="bg-background/50"
                         />
                       </motion.div>
-                      
+
                       <motion.div whileFocus={{ scale: 1.02 }}>
                         <Input
                           placeholder="Your Phone (Optional)"
@@ -1691,7 +1690,7 @@ export default function App() {
                           className="bg-background/50"
                         />
                       </motion.div>
-                      
+
                       <motion.div whileFocus={{ scale: 1.02 }}>
                         <Textarea
                           placeholder="Tell me about your project..."
@@ -1701,13 +1700,13 @@ export default function App() {
                           className="bg-background/50 resize-none"
                         />
                       </motion.div>
-                      
+
                       <motion.div
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >
-                        <Button 
-                          type="submit" 
+                        <Button
+                          type="submit"
                           className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary group"
                           size="lg"
                         >
@@ -1789,7 +1788,7 @@ export default function App() {
         >
           <MessageCircle className="w-7 h-7" />
         </motion.div>
-        
+
         {/* Pulse Effect */}
         <div className="absolute inset-0 bg-green-500 rounded-full animate-ping opacity-20" />
       </motion.a>
@@ -1805,7 +1804,7 @@ export default function App() {
                   {cart.length === 0 ? 'Your cart is empty' : `${cart.reduce((sum, item) => sum + item.quantity, 0)} item(s) in cart`}
                 </DialogDescription>
               </DialogHeader>
-              
+
               {cart.length === 0 ? (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -1864,9 +1863,9 @@ export default function App() {
                       </div>
                     </motion.div>
                   ))}
-                  
+
                   <Separator />
-                  
+
                   <div className="space-y-2">
                     <div className="flex justify-between">
                       <span>Subtotal ({cart.reduce((sum, item) => sum + item.quantity, 0)} items):</span>
@@ -1886,9 +1885,9 @@ export default function App() {
                       <span>${total.toFixed(2)}</span>
                     </div>
                   </div>
-                  
+
                   <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                    <Button 
+                    <Button
                       onClick={() => {
                         setShowCart(false);
                         setShowCheckout(true);
@@ -1898,7 +1897,7 @@ export default function App() {
                       Proceed to Checkout
                     </Button>
                   </motion.div>
-                  
+
                   <div className="text-xs text-muted-foreground text-center space-y-1">
                     <div>✓ Secure checkout with SSL encryption</div>
                     <div>✓ 30-day return policy</div>
@@ -1922,7 +1921,7 @@ export default function App() {
                   Complete your order for {cart.reduce((sum, item) => sum + item.quantity, 0)} item(s)
                 </DialogDescription>
               </DialogHeader>
-              
+
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -1950,7 +1949,7 @@ export default function App() {
                     />
                   </div>
                 </div>
-                
+
                 {/* Shipping Address */}
                 <div>
                   <h3 className="text-lg mb-4">Shipping Address</h3>
@@ -1979,7 +1978,7 @@ export default function App() {
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Order Summary */}
                 <div>
                   <h3 className="text-lg mb-4">Order Summary</h3>
@@ -2010,18 +2009,18 @@ export default function App() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
                   <h4 className="mb-2">Payment Information</h4>
                   <p className="text-sm text-muted-foreground">
                     Your order will be reviewed before payment. Payment instructions will be sent via email after order confirmation.
                   </p>
                 </div>
-                
+
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <Button 
-                    onClick={handleCheckout} 
-                    className="w-full bg-gradient-to-r from-primary to-primary/80" 
+                  <Button
+                    onClick={handleCheckout}
+                    className="w-full bg-gradient-to-r from-primary to-primary/80"
                     size="lg"
                   >
                     Place Order
@@ -2083,7 +2082,7 @@ export default function App() {
                     <Package className="w-5 h-5 text-muted-foreground" />
                     <h3 className="text-lg">What Happens Next?</h3>
                   </div>
-                  
+
                   <div className="space-y-4">
                     {[
                       {
@@ -2092,13 +2091,13 @@ export default function App() {
                         description: "Our team will review your order to ensure artwork availability and quality."
                       },
                       {
-                        step: "2", 
+                        step: "2",
                         title: "Email Confirmation",
                         description: "You'll receive an email with order status updates and payment instructions."
                       },
                       {
                         step: "3",
-                        title: "Secure Packaging & Shipping", 
+                        title: "Secure Packaging & Shipping",
                         description: "Once approved and payment is received, we'll carefully package and ship your artwork."
                       }
                     ].map((item, index) => (
@@ -2150,7 +2149,7 @@ export default function App() {
                           <p className="font-medium">${(item.price * item.quantity).toFixed(2)}</p>
                         </motion.div>
                       ))}
-                      
+
                       <Separator />
                       <div className="space-y-1 text-sm">
                         <div className="flex justify-between">
@@ -2190,7 +2189,7 @@ export default function App() {
                           <p>{orderDetails.customer.phone}</p>
                         </div>
                       </motion.div>
-                      
+
                       {orderDetails.address.street && (
                         <motion.div
                           initial={{ opacity: 0, y: 10 }}

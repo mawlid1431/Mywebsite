@@ -824,7 +824,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                           {service.price}
                         </CardDescription>
                         <CardDescription className="text-xs text-muted-foreground/70">
-                          Created: {new Date(service.created_at).toLocaleDateString()}
+                          Created: {service.created_at ? new Date(service.created_at).toLocaleDateString() : 'N/A'}
                         </CardDescription>
                       </div>
                       <div className="flex space-x-2">
@@ -897,7 +897,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                           {project.technology}
                         </CardDescription>
                         <CardDescription className="text-xs text-muted-foreground/70">
-                          Created: {new Date(project.created_at).toLocaleDateString()}
+                          Created: {project.created_at ? new Date(project.created_at).toLocaleDateString() : 'N/A'}
                         </CardDescription>
                       </div>
                       <div className="flex space-x-2">

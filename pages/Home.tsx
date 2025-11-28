@@ -96,8 +96,6 @@ export default function Home() {
     }));
 
     const services = dbServices.map(dbService => {
-        const priceMatch = dbService.price.match(/\$(\d+)/);
-        const price = priceMatch ? parseInt(priceMatch[1]) : 0;
         return {
             id: dbService.id.toString(),
             title: dbService.name,
