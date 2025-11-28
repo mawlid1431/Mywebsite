@@ -8,7 +8,7 @@ import { getServices, getProjects } from '../utils/supabase/database';
 import { Service as DbService, Project as DbProject } from '../utils/supabase/client';
 import {
     Code, Users, Award, ArrowRight, ExternalLink, Star, Sparkles,
-    ChevronDown, MapPin, Globe, Zap, Mail, ShoppingCart
+    ChevronDown, MapPin, Globe, Zap, Mail
 } from 'lucide-react';
 
 const profileImage1 = "/images/hero-image.jpg";

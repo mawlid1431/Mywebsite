@@ -4,7 +4,7 @@ import { Toaster } from 'sonner';
 import { AnimatePresence } from 'framer-motion';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './components/ui/dialog';
 import { Button } from './components/ui/button';
-import { Badge } from './components/ui/badge';
+// Badge import removed - not used in this file
 import { Separator } from './components/ui/separator';
 import { Plus, Minus, Trash2, MessageCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
