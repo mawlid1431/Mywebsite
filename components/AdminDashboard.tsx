@@ -24,8 +24,18 @@ import {
   getContacts,
   updateContactStatus,
   deleteContact,
+  getTestimonials,
+  addTestimonial,
+  updateTestimonial,
+  deleteTestimonial,
+  getTrustedCompanies,
+  addTrustedCompany,
+  updateTrustedCompany,
+  deleteTrustedCompany,
   Order,
-  Contact
+  Contact,
+  Testimonial,
+  TrustedCompany
 } from '../utils/supabase/database';
 import { Service, Project } from '../utils/supabase/client';
 import {
@@ -50,7 +60,11 @@ import {
   MapPin,
   Moon,
   Sun,
-  Settings
+  Settings,
+  MessageSquare,
+  Building2,
+  Upload,
+  Star
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -60,7 +74,7 @@ interface AdminDashboardProps {
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'contacts' | 'orders' | 'services' | 'projects' | 'settings'>('contacts');
+  const [activeTab, setActiveTab] = useState<'contacts' | 'orders' | 'services' | 'projects' | 'testimonials' | 'trusted' | 'settings'>('contacts');
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
       return document.documentElement.classList.contains('dark');
@@ -71,15 +85,21 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [contacts, setContacts] = useState<Contact[]>([]);
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [trustedCompanies, setTrustedCompanies] = useState<TrustedCompany[]>([]);
   const [loading, setLoading] = useState(true);
   const [showServiceDialog, setShowServiceDialog] = useState(false);
   const [showProjectDialog, setShowProjectDialog] = useState(false);
   const [showOrderDialog, setShowOrderDialog] = useState(false);
   const [showContactDialog, setShowContactDialog] = useState(false);
+  const [showTestimonialDialog, setShowTestimonialDialog] = useState(false);
+  const [showTrustedDialog, setShowTrustedDialog] = useState(false);
   const [editingService, setEditingService] = useState<Service | null>(null);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
+  const [editingTestimonial, setEditingTestimonial] = useState<Testimonial | null>(null);
+  const [editingTrusted, setEditingTrusted] = useState<TrustedCompany | null>(null);
 
   // Form states
   const [serviceForm, setServiceForm] = useState({
@@ -96,6 +116,18 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
     image: '',
     technology: '',
     official_link: ''
+  });
+
+  const [testimonialForm, setTestimonialForm] = useState({
+    name: '',
+    role: '',
+    rating: 5,
+    feedback: ''
+  });
+
+  const [trustedForm, setTrustedForm] = useState({
+    name: '',
+    logo_url: ''
   });
 
   // Auto-logout functionality
@@ -175,16 +207,20 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   const loadData = async () => {
     try {
       setLoading(true);
-      const [servicesData, projectsData, ordersData, contactsData] = await Promise.all([
+      const [servicesData, projectsData, ordersData, contactsData, testimonialsData, trustedData] = await Promise.all([
         getServices(),
         getProjects(),
         getOrders(),
-        getContacts()
+        getContacts(),
+        getTestimonials(),
+        getTrustedCompanies()
       ]);
       setServices(servicesData);
       setProjects(projectsData);
       setOrders(ordersData);
       setContacts(contactsData);
+      setTestimonials(testimonialsData);
+      setTrustedCompanies(trustedData);
     } catch (error) {
       toast.error('Failed to load data');
       console.error('Error loading data:', error);
@@ -429,6 +465,124 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
     }
   };
 
+  // Testimonial handlers
+  const handleTestimonialSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      if (editingTestimonial) {
+        const updated = await updateTestimonial(editingTestimonial.id, testimonialForm);
+        if (updated) {
+          toast.success('Testimonial updated successfully');
+          await loadData();
+        }
+      } else {
+        const added = await addTestimonial(testimonialForm);
+        if (added) {
+          toast.success('Testimonial added successfully');
+          await loadData();
+        }
+      }
+      resetTestimonialForm();
+    } catch (error) {
+      toast.error('Failed to save testimonial');
+      console.error('Error saving testimonial:', error);
+    }
+  };
+
+  const handleTestimonialDelete = async (id: number) => {
+    if (confirm('Are you sure you want to delete this testimonial?')) {
+      try {
+        const deleted = await deleteTestimonial(id);
+        if (deleted) {
+          toast.success('Testimonial deleted successfully');
+          await loadData();
+        }
+      } catch (error) {
+        toast.error('Failed to delete testimonial');
+        console.error('Error deleting testimonial:', error);
+      }
+    }
+  };
+
+  const resetTestimonialForm = () => {
+    setTestimonialForm({ name: '', role: '', rating: 5, feedback: '' });
+    setEditingTestimonial(null);
+    setShowTestimonialDialog(false);
+  };
+
+  const openTestimonialDialog = (testimonial?: Testimonial) => {
+    if (testimonial) {
+      setEditingTestimonial(testimonial);
+      setTestimonialForm({
+        name: testimonial.name,
+        role: testimonial.role,
+        rating: testimonial.rating,
+        feedback: testimonial.feedback
+      });
+    } else {
+      resetTestimonialForm();
+    }
+    setShowTestimonialDialog(true);
+  };
+
+  // Trusted Company handlers
+  const handleTrustedSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      if (editingTrusted) {
+        const updated = await updateTrustedCompany(editingTrusted.id, trustedForm);
+        if (updated) {
+          toast.success('Trusted company updated successfully');
+          await loadData();
+        }
+      } else {
+        const added = await addTrustedCompany(trustedForm);
+        if (added) {
+          toast.success('Trusted company added successfully');
+          await loadData();
+        }
+      }
+      resetTrustedForm();
+    } catch (error) {
+      toast.error('Failed to save trusted company');
+      console.error('Error saving trusted company:', error);
+    }
+  };
+
+  const handleTrustedDelete = async (id: number) => {
+    if (confirm('Are you sure you want to delete this trusted company?')) {
+      try {
+        const deleted = await deleteTrustedCompany(id);
+        if (deleted) {
+          toast.success('Trusted company deleted successfully');
+          await loadData();
+        }
+      } catch (error) {
+        toast.error('Failed to delete trusted company');
+        console.error('Error deleting trusted company:', error);
+      }
+    }
+  };
+
+  const resetTrustedForm = () => {
+    setTrustedForm({ name: '', logo_url: '' });
+    setEditingTrusted(null);
+    setShowTrustedDialog(false);
+  };
+
+  const openTrustedDialog = (company?: TrustedCompany) => {
+    if (company) {
+      setEditingTrusted(company);
+      setTrustedForm({
+        name: company.name,
+        logo_url: company.logo_url
+      });
+    } else {
+      resetTrustedForm();
+    }
+    setShowTrustedDialog(true);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background">
       {/* Header */}
@@ -561,7 +715,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
         </div>
 
         {/* Tabs */}
-        <div className="flex space-x-2 mb-6">
+        <div className="flex flex-wrap gap-2 mb-6">
           <Button
             onClick={() => setActiveTab('contacts')}
             variant={activeTab === 'contacts' ? 'default' : 'outline'}
@@ -605,6 +759,28 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
           >
             <Globe className="w-4 h-4 mr-2" />
             Projects
+          </Button>
+          <Button
+            onClick={() => setActiveTab('testimonials')}
+            variant={activeTab === 'testimonials' ? 'default' : 'outline'}
+            className={activeTab === 'testimonials'
+              ? 'bg-pink-600 hover:bg-pink-700 text-white'
+              : ''
+            }
+          >
+            <MessageSquare className="w-4 h-4 mr-2" />
+            Testimonials
+          </Button>
+          <Button
+            onClick={() => setActiveTab('trusted')}
+            variant={activeTab === 'trusted' ? 'default' : 'outline'}
+            className={activeTab === 'trusted'
+              ? 'bg-indigo-600 hover:bg-indigo-700 text-white'
+              : ''
+            }
+          >
+            <Building2 className="w-4 h-4 mr-2" />
+            Trusted
           </Button>
           <Button
             onClick={() => setActiveTab('settings')}
@@ -935,6 +1111,151 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
                   <div className="text-center py-12 text-muted-foreground">
                     <Globe className="w-12 h-12 mx-auto mb-4 opacity-50" />
                     <p>No projects yet</p>
+                  </div>
+                )}
+              </div>
+            )}
+          </motion.div>
+        ) : activeTab === 'testimonials' ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            key="testimonials"
+          >
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-semibold text-foreground">Testimonials Management</h2>
+              <Button onClick={() => openTestimonialDialog()} className="bg-pink-600 hover:bg-pink-700">
+                <Plus className="w-4 h-4 mr-2" />
+                Add Testimonial
+              </Button>
+            </div>
+
+            {loading ? (
+              <div className="text-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent mx-auto"></div>
+                <p className="text-muted-foreground mt-2">Loading testimonials...</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {testimonials.map((testimonial) => (
+                  <Card key={testimonial.id} className="bg-card/50 border-border flex flex-col">
+                    <CardHeader className="space-y-2">
+                      <div className="flex items-start justify-between gap-2">
+                        <CardTitle className="text-foreground text-base line-clamp-1">
+                          {testimonial.name}
+                        </CardTitle>
+                        <div className="flex items-center gap-1 text-yellow-500 shrink-0">
+                          {Array.from({ length: testimonial.rating }).map((_, i) => (
+                            <Star key={i} className="w-4 h-4 fill-current" />
+                          ))}
+                        </div>
+                      </div>
+                      <CardDescription className="text-sm text-muted-foreground line-clamp-1">
+                        {testimonial.role}
+                      </CardDescription>
+                      <CardDescription className="text-xs text-muted-foreground/70">
+                        {testimonial.created_at ? new Date(testimonial.created_at).toLocaleDateString() : 'N/A'}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex-1">
+                      <p className="text-sm text-muted-foreground line-clamp-4">{testimonial.feedback}</p>
+                    </CardContent>
+                    <CardContent className="pt-0">
+                      <div className="flex gap-2 justify-end">
+                        <Button
+                          onClick={() => openTestimonialDialog(testimonial)}
+                          size="sm"
+                          variant="outline"
+                        >
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          onClick={() => handleTestimonialDelete(testimonial.id)}
+                          size="sm"
+                          variant="destructive"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+                {testimonials.length === 0 && (
+                  <div className="text-center py-12 text-muted-foreground col-span-full">
+                    <MessageSquare className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                    <p>No testimonials yet</p>
+                  </div>
+                )}
+              </div>
+            )}
+          </motion.div>
+        ) : activeTab === 'trusted' ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            key="trusted"
+          >
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-semibold text-foreground">Trusted Companies Management</h2>
+              <Button onClick={() => openTrustedDialog()} className="bg-indigo-600 hover:bg-indigo-700">
+                <Plus className="w-4 h-4 mr-2" />
+                Add Company
+              </Button>
+            </div>
+
+            {loading ? (
+              <div className="text-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-2 border-primary border-t-transparent mx-auto"></div>
+                <p className="text-muted-foreground mt-2">Loading trusted companies...</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                {trustedCompanies.map((company) => (
+                  <Card key={company.id} className="bg-card/50 border-border flex flex-col">
+                    <CardHeader className="space-y-2">
+                      <CardTitle className="text-foreground text-base line-clamp-1">
+                        {company.name}
+                      </CardTitle>
+                      <CardDescription className="text-xs text-muted-foreground/70">
+                        {company.created_at ? new Date(company.created_at).toLocaleDateString() : 'N/A'}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="flex-1 flex items-center justify-center p-6">
+                      <div className="w-full h-24 flex items-center justify-center bg-muted/30 rounded-lg overflow-hidden">
+                        <img
+                          src={company.logo_url}
+                          alt={company.name}
+                          className="max-w-full max-h-full object-contain"
+                          onError={(e) => {
+                            e.currentTarget.src = 'https://via.placeholder.com/150?text=No+Logo';
+                          }}
+                        />
+                      </div>
+                    </CardContent>
+                    <CardContent className="pt-0">
+                      <div className="flex gap-2 justify-end">
+                        <Button
+                          onClick={() => openTrustedDialog(company)}
+                          size="sm"
+                          variant="outline"
+                        >
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          onClick={() => handleTrustedDelete(company.id)}
+                          size="sm"
+                          variant="destructive"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+                {trustedCompanies.length === 0 && (
+                  <div className="text-center py-12 text-muted-foreground col-span-full">
+                    <Building2 className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                    <p>No trusted companies yet</p>
                   </div>
                 )}
               </div>
@@ -1295,6 +1616,134 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
               </div>
             </>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Testimonial Dialog */}
+      <Dialog open={showTestimonialDialog} onOpenChange={setShowTestimonialDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>{editingTestimonial ? 'Edit Testimonial' : 'Add New Testimonial'}</DialogTitle>
+            <DialogDescription>
+              {editingTestimonial ? 'Update testimonial information' : 'Create a new testimonial'}
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleTestimonialSubmit} className="space-y-4">
+            <div>
+              <label className="text-sm font-medium">Name</label>
+              <Input
+                value={testimonialForm.name}
+                onChange={(e) => setTestimonialForm(prev => ({ ...prev, name: e.target.value }))}
+                placeholder="Enter person's name"
+                required
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Role</label>
+              <Input
+                value={testimonialForm.role}
+                onChange={(e) => setTestimonialForm(prev => ({ ...prev, role: e.target.value }))}
+                placeholder="e.g., CEO at Company"
+                required
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Rating (1-5)</label>
+              <div className="flex items-center gap-2">
+                <Input
+                  type="number"
+                  min="1"
+                  max="5"
+                  value={testimonialForm.rating}
+                  onChange={(e) => setTestimonialForm(prev => ({ ...prev, rating: parseInt(e.target.value) || 5 }))}
+                  required
+                  className="w-20"
+                />
+                <div className="flex items-center gap-1 text-yellow-500">
+                  {Array.from({ length: testimonialForm.rating }).map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-current" />
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div>
+              <label className="text-sm font-medium">Feedback</label>
+              <Textarea
+                value={testimonialForm.feedback}
+                onChange={(e) => setTestimonialForm(prev => ({ ...prev, feedback: e.target.value }))}
+                placeholder="Enter testimonial feedback"
+                rows={4}
+                required
+              />
+            </div>
+            <div className="flex justify-end space-x-2">
+              <Button type="button" variant="outline" onClick={resetTestimonialForm}>
+                Cancel
+              </Button>
+              <Button type="submit">
+                {editingTestimonial ? 'Update' : 'Create'} Testimonial
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Trusted Company Dialog */}
+      <Dialog open={showTrustedDialog} onOpenChange={setShowTrustedDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>{editingTrusted ? 'Edit Trusted Company' : 'Add New Trusted Company'}</DialogTitle>
+            <DialogDescription>
+              {editingTrusted ? 'Update company information' : 'Add a new trusted company'}
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleTrustedSubmit} className="space-y-4">
+            <div>
+              <label className="text-sm font-medium">Company Name</label>
+              <Input
+                value={trustedForm.name}
+                onChange={(e) => setTrustedForm(prev => ({ ...prev, name: e.target.value }))}
+                placeholder="Enter company name"
+                required
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Logo URL</label>
+              <Input
+                value={trustedForm.logo_url}
+                onChange={(e) => setTrustedForm(prev => ({ ...prev, logo_url: e.target.value }))}
+                placeholder="https://example.com/logo.png"
+                required
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                <Upload className="w-3 h-3 inline mr-1" />
+                Enter the URL of the company logo image
+              </p>
+            </div>
+            {trustedForm.logo_url && (
+              <div>
+                <label className="text-sm font-medium">Logo Preview</label>
+                <div className="mt-2 w-full h-32 flex items-center justify-center bg-muted/30 rounded-lg overflow-hidden border border-border">
+                  <img
+                    src={trustedForm.logo_url}
+                    alt="Logo preview"
+                    className="max-w-full max-h-full object-contain"
+                    onError={(e) => {
+                      e.currentTarget.src = 'https://via.placeholder.com/150?text=Invalid+URL';
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+            <div className="flex justify-end space-x-2">
+              <Button type="button" variant="outline" onClick={resetTrustedForm}>
+                Cancel
+              </Button>
+              <Button type="submit">
+                {editingTrusted ? 'Update' : 'Create'} Company
+              </Button>
+            </div>
+          </form>
         </DialogContent>
       </Dialog>
     </div>

@@ -5,6 +5,7 @@ This folder contains SQL files for setting up your Supabase database.
 ## Files
 
 - `create-users-table.sql` - Creates users and password_history tables for admin authentication
+- `create-testimonials-trusted.sql` - Creates testimonials and trusted_companies tables for portfolio content
 
 ## How to Apply SQL Files
 
@@ -109,6 +110,49 @@ Make sure you're running the SQL as a database owner or have sufficient privileg
 1. Verify the user was created: `SELECT * FROM users;`
 2. Check if the user is active: `SELECT is_active FROM users WHERE username = 'admin';`
 3. Verify your credentials match the database
+
+## Testimonials & Trusted Companies Setup
+
+### `create-testimonials-trusted.sql`
+
+This file creates two new tables for managing portfolio content:
+
+#### `testimonials` Table
+Stores customer testimonials and reviews.
+
+**Columns:**
+- `id` - Primary key (auto-increment)
+- `name` - Person's full name
+- `role` - Job title and company (e.g., "CEO at TechCorp")
+- `rating` - Star rating (1-5)
+- `feedback` - Testimonial text
+- `created_at` - Creation timestamp
+- `updated_at` - Last update timestamp
+
+#### `trusted_companies` Table
+Stores logos of trusted companies/clients.
+
+**Columns:**
+- `id` - Primary key (auto-increment)
+- `name` - Company name
+- `logo_url` - URL to company logo image
+- `created_at` - Creation timestamp
+- `updated_at` - Last update timestamp
+
+**Features:**
+- ✅ Row Level Security (RLS) enabled
+- ✅ Public read access (anyone can view)
+- ✅ Authenticated write access (only admins can modify)
+- ✅ Auto-update triggers for timestamps
+- ✅ Performance indexes
+- ✅ Sample data included for testing
+
+**How to Apply:**
+1. Open Supabase Dashboard → SQL Editor
+2. Copy contents of `create-testimonials-trusted.sql`
+3. Paste and click "Run"
+4. Tables will be created with sample data
+5. Access via Admin Dashboard → Testimonials/Trusted tabs
 
 ## Additional SQL Files
 

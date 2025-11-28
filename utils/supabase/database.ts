@@ -41,6 +41,26 @@ export interface Contact {
   updated_at?: string;
 }
 
+// Testimonials types
+export interface Testimonial {
+  id: number;
+  name: string;
+  role: string;
+  rating: number;
+  feedback: string;
+  created_at: string;
+  updated_at?: string;
+}
+
+// Trusted Companies types
+export interface TrustedCompany {
+  id: number;
+  name: string;
+  logo_url: string;
+  created_at: string;
+  updated_at?: string;
+}
+
 // Services Management Functions
 export async function getServices(): Promise<Service[]> {
   try {
@@ -611,5 +631,171 @@ export async function getAllUsers(): Promise<User[]> {
   } catch (error) {
     console.error('Error fetching users:', error);
     return [];
+  }
+}
+
+// Testimonials Management Functions
+export async function getTestimonials(): Promise<Testimonial[]> {
+  try {
+    const { data, error } = await supabase
+      .from('testimonials')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching testimonials:', error);
+      return [];
+    }
+
+    return data || [];
+  } catch (err) {
+    console.error('Error in getTestimonials:', err);
+    return [];
+  }
+}
+
+export async function addTestimonial(testimonialData: Omit<Testimonial, 'id' | 'created_at' | 'updated_at'>): Promise<Testimonial | null> {
+  try {
+    const { data, error } = await supabase
+      .from('testimonials')
+      .insert([testimonialData])
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error adding testimonial:', error);
+      return null;
+    }
+
+    console.log('✅ Testimonial added successfully!');
+    return data;
+  } catch (err) {
+    console.error('Error in addTestimonial:', err);
+    return null;
+  }
+}
+
+export async function updateTestimonial(id: number, testimonialData: Omit<Testimonial, 'id' | 'created_at' | 'updated_at'>): Promise<Testimonial | null> {
+  try {
+    const { data, error } = await supabase
+      .from('testimonials')
+      .update({ ...testimonialData, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error updating testimonial:', error);
+      return null;
+    }
+
+    console.log('✅ Testimonial updated successfully!');
+    return data;
+  } catch (err) {
+    console.error('Error in updateTestimonial:', err);
+    return null;
+  }
+}
+
+export async function deleteTestimonial(id: number): Promise<boolean> {
+  try {
+    const { error } = await supabase
+      .from('testimonials')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error deleting testimonial:', error);
+      return false;
+    }
+
+    console.log('✅ Testimonial deleted successfully!');
+    return true;
+  } catch (err) {
+    console.error('Error in deleteTestimonial:', err);
+    return false;
+  }
+}
+
+// Trusted Companies Management Functions
+export async function getTrustedCompanies(): Promise<TrustedCompany[]> {
+  try {
+    const { data, error } = await supabase
+      .from('trusted_companies')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching trusted companies:', error);
+      return [];
+    }
+
+    return data || [];
+  } catch (err) {
+    console.error('Error in getTrustedCompanies:', err);
+    return [];
+  }
+}
+
+export async function addTrustedCompany(companyData: Omit<TrustedCompany, 'id' | 'created_at' | 'updated_at'>): Promise<TrustedCompany | null> {
+  try {
+    const { data, error } = await supabase
+      .from('trusted_companies')
+      .insert([companyData])
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error adding trusted company:', error);
+      return null;
+    }
+
+    console.log('✅ Trusted company added successfully!');
+    return data;
+  } catch (err) {
+    console.error('Error in addTrustedCompany:', err);
+    return null;
+  }
+}
+
+export async function updateTrustedCompany(id: number, companyData: Omit<TrustedCompany, 'id' | 'created_at' | 'updated_at'>): Promise<TrustedCompany | null> {
+  try {
+    const { data, error } = await supabase
+      .from('trusted_companies')
+      .update({ ...companyData, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Error updating trusted company:', error);
+      return null;
+    }
+
+    console.log('✅ Trusted company updated successfully!');
+    return data;
+  } catch (err) {
+    console.error('Error in updateTrustedCompany:', err);
+    return null;
+  }
+}
+
+export async function deleteTrustedCompany(id: number): Promise<boolean> {
+  try {
+    const { error } = await supabase
+      .from('trusted_companies')
+      .delete()
+      .eq('id', id);
+
+    if (error) {
+      console.error('Error deleting trusted company:', error);
+      return false;
+    }
+
+    console.log('✅ Trusted company deleted successfully!');
+    return true;
+  } catch (err) {
+    console.error('Error in deleteTrustedCompany:', err);
+    return false;
   }
 }
