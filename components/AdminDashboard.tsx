@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
@@ -8,6 +8,7 @@ import { Badge } from '../components/ui/badge';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
 import { toast } from 'sonner';
+import AdminSettings from './AdminSettings';
 import {
   getServices,
   getProjects,
@@ -48,7 +49,8 @@ import {
   Phone,
   MapPin,
   Moon,
-  Sun
+  Sun,
+  Settings
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -58,7 +60,7 @@ interface AdminDashboardProps {
 
 const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'contacts' | 'orders' | 'services' | 'projects'>('contacts');
+  const [activeTab, setActiveTab] = useState<'contacts' | 'orders' | 'services' | 'projects' | 'settings'>('contacts');
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
       return document.documentElement.classList.contains('dark');
@@ -95,6 +97,79 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
     technology: '',
     official_link: ''
   });
+
+  // Auto-logout functionality
+  const INACTIVITY_TIMEOUT = 60 * 60 * 1000; // 1 hour in milliseconds
+
+  const handleLogout = useCallback(() => {
+    localStorage.removeItem('adminAuthenticated');
+    localStorage.removeItem('adminSession');
+    sessionStorage.removeItem('adminSessionActive');
+    toast.info('Session expired. Please login again.');
+    onLogout();
+    navigate('/admin');
+  }, [onLogout, navigate]);
+
+  // Check session validity
+  const checkSession = useCallback(() => {
+    const sessionActive = sessionStorage.getItem('adminSessionActive');
+    const sessionData = localStorage.getItem('adminSession');
+
+    // If tab was closed (sessionStorage cleared), logout
+    if (!sessionActive) {
+      handleLogout();
+      return false;
+    }
+
+    if (sessionData) {
+      const session = JSON.parse(sessionData);
+      const now = Date.now();
+      const timeSinceLastActivity = now - session.lastActivity;
+
+      // If inactive for more than 1 hour, logout
+      if (timeSinceLastActivity > INACTIVITY_TIMEOUT) {
+        handleLogout();
+        return false;
+      }
+    }
+    return true;
+  }, [handleLogout, INACTIVITY_TIMEOUT]);
+
+  // Update last activity time
+  const updateActivity = useCallback(() => {
+    const sessionData = localStorage.getItem('adminSession');
+    if (sessionData) {
+      const session = JSON.parse(sessionData);
+      session.lastActivity = Date.now();
+      localStorage.setItem('adminSession', JSON.stringify(session));
+    }
+  }, []);
+
+  // Set up activity tracking and session checking
+  useEffect(() => {
+    // Check session on mount
+    if (!checkSession()) return;
+
+    // Track user activity
+    const activityEvents = ['mousedown', 'keydown', 'scroll', 'touchstart', 'click'];
+
+    activityEvents.forEach(event => {
+      window.addEventListener(event, updateActivity);
+    });
+
+    // Check session every minute
+    const sessionCheckInterval = setInterval(() => {
+      checkSession();
+    }, 60000); // Check every minute
+
+    // Cleanup
+    return () => {
+      activityEvents.forEach(event => {
+        window.removeEventListener(event, updateActivity);
+      });
+      clearInterval(sessionCheckInterval);
+    };
+  }, [checkSession, updateActivity]);
 
   // Load data
   const loadData = async () => {
@@ -354,12 +429,6 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('adminAuthenticated');
-    onLogout();
-    navigate('/');
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background">
       {/* Header */}
@@ -496,8 +565,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
           <Button
             onClick={() => setActiveTab('contacts')}
             variant={activeTab === 'contacts' ? 'default' : 'outline'}
-            className={activeTab === 'contacts' 
-              ? 'bg-blue-600 hover:bg-blue-700 text-white' 
+            className={activeTab === 'contacts'
+              ? 'bg-blue-600 hover:bg-blue-700 text-white'
               : ''
             }
           >
@@ -507,8 +576,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
           <Button
             onClick={() => setActiveTab('orders')}
             variant={activeTab === 'orders' ? 'default' : 'outline'}
-            className={activeTab === 'orders' 
-              ? 'bg-green-600 hover:bg-green-700 text-white' 
+            className={activeTab === 'orders'
+              ? 'bg-green-600 hover:bg-green-700 text-white'
               : ''
             }
           >
@@ -518,8 +587,8 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
           <Button
             onClick={() => setActiveTab('services')}
             variant={activeTab === 'services' ? 'default' : 'outline'}
-            className={activeTab === 'services' 
-              ? 'bg-purple-600 hover:bg-purple-700 text-white' 
+            className={activeTab === 'services'
+              ? 'bg-purple-600 hover:bg-purple-700 text-white'
               : ''
             }
           >
@@ -529,13 +598,24 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
           <Button
             onClick={() => setActiveTab('projects')}
             variant={activeTab === 'projects' ? 'default' : 'outline'}
-            className={activeTab === 'projects' 
-              ? 'bg-orange-600 hover:bg-orange-700 text-white' 
+            className={activeTab === 'projects'
+              ? 'bg-orange-600 hover:bg-orange-700 text-white'
               : ''
             }
           >
             <Globe className="w-4 h-4 mr-2" />
             Projects
+          </Button>
+          <Button
+            onClick={() => setActiveTab('settings')}
+            variant={activeTab === 'settings' ? 'default' : 'outline'}
+            className={activeTab === 'settings'
+              ? 'bg-gray-600 hover:bg-gray-700 text-white'
+              : ''
+            }
+          >
+            <Settings className="w-4 h-4 mr-2" />
+            Settings
           </Button>
         </div>
 
@@ -780,7 +860,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
               </div>
             )}
           </motion.div>
-        ) : (
+        ) : activeTab === 'projects' ? (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -862,7 +942,15 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
               </div>
             )}
           </motion.div>
-        )}
+        ) : activeTab === 'settings' ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            key="settings"
+          >
+            <AdminSettings />
+          </motion.div>
+        ) : null}
       </div>
 
       {/* Service Dialog */}

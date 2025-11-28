@@ -23,6 +23,7 @@ import AdminDashboard from './components/AdminDashboard';
 import DatabaseDebug from './components/DatabaseDebug';
 import SimpleTest from './components/SimpleTest';
 import EmailTest from './components/EmailTest';
+import DatabaseTest from './components/DatabaseTest';
 
 interface CartItem {
   id: string;
@@ -149,6 +150,7 @@ const AppRouter: React.FC = () => {
         <Route path="/debug" element={<DatabaseDebug />} />
         <Route path="/test" element={<SimpleTest />} />
         <Route path="/email-test" element={<EmailTest />} />
+        <Route path="/db-test" element={<DatabaseTest />} />
 
         {/* Redirect any unknown routes to home */}
         <Route path="*" element={<Navigate to="/" replace />} />

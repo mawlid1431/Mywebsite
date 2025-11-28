@@ -246,12 +246,12 @@ export async function testDatabaseConnection(): Promise<boolean> {
 export function subscribeToServices(callback: (services: Service[]) => void) {
   return supabase
     .channel('services-changes')
-    .on('postgres_changes', 
-      { 
-        event: '*', 
-        schema: 'public', 
-        table: 'services' 
-      }, 
+    .on('postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'services'
+      },
       async () => {
         const services = await getServices();
         callback(services);
@@ -263,12 +263,12 @@ export function subscribeToServices(callback: (services: Service[]) => void) {
 export function subscribeToProjects(callback: (projects: Project[]) => void) {
   return supabase
     .channel('projects-changes')
-    .on('postgres_changes', 
-      { 
-        event: '*', 
-        schema: 'public', 
-        table: 'projects' 
-      }, 
+    .on('postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'projects'
+      },
       async () => {
         const projects = await getProjects();
         callback(projects);
@@ -440,5 +440,176 @@ export async function deleteContact(id: number): Promise<boolean> {
   } catch (err) {
     console.error('Error in deleteContact:', err);
     return false;
+  }
+}
+
+// User Management Types
+export interface User {
+  id: number;
+  username: string;
+  email: string;
+  name: string;
+  password: string;
+  role: string;
+  is_active: boolean;
+  last_login?: string;
+  password_changed_at?: string;
+  created_at: string;
+  updated_at?: string;
+}
+
+export interface PasswordHistory {
+  id: number;
+  user_id: number;
+  password_hash: string;
+  created_at: string;
+}
+
+// User Management Functions
+export async function getUserByUsername(usernameOrEmail: string): Promise<User | null> {
+  try {
+    console.log('Looking for user:', usernameOrEmail);
+
+    // Try to find user by username first
+    let { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .eq('username', usernameOrEmail)
+      .maybeSingle();
+
+    console.log('Username search result:', { data, error });
+
+    // If not found by username, try email
+    if (!data && !error) {
+      console.log('Trying email search...');
+      const result = await supabase
+        .from('users')
+        .select('*')
+        .eq('email', usernameOrEmail)
+        .maybeSingle();
+
+      console.log('Email search result:', { data: result.data, error: result.error });
+
+      data = result.data;
+      error = result.error;
+    }
+
+    if (error) {
+      console.error('Database error:', error);
+      throw error;
+    }
+
+    console.log('Final user data:', data);
+    return data;
+  } catch (error) {
+    console.error('Error fetching user:', error);
+    return null;
+  }
+}
+
+export async function updateUserPassword(userId: number, newPassword: string): Promise<boolean> {
+  try {
+    const { error } = await supabase
+      .from('users')
+      .update({
+        password: newPassword,
+        password_changed_at: new Date().toISOString()
+      })
+      .eq('id', userId);
+
+    if (error) throw error;
+    return true;
+  } catch (error) {
+    console.error('Error updating password:', error);
+    return false;
+  }
+}
+
+export async function addPasswordToHistory(userId: number, passwordHash: string): Promise<boolean> {
+  try {
+    const { error } = await supabase
+      .from('password_history')
+      .insert({ user_id: userId, password_hash: passwordHash });
+
+    if (error) throw error;
+    return true;
+  } catch (error) {
+    console.error('Error adding password to history:', error);
+    return false;
+  }
+}
+
+export async function getPasswordHistory(userId: number, limit: number = 5): Promise<PasswordHistory[]> {
+  try {
+    const { data, error } = await supabase
+      .from('password_history')
+      .select('*')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(limit);
+
+    if (error) throw error;
+    return data || [];
+  } catch (error) {
+    console.error('Error fetching password history:', error);
+    return [];
+  }
+}
+
+export async function updateLastLogin(userId: number): Promise<boolean> {
+  try {
+    const { error } = await supabase
+      .from('users')
+      .update({ last_login: new Date().toISOString() })
+      .eq('id', userId);
+
+    if (error) throw error;
+    return true;
+  } catch (error) {
+    console.error('Error updating last login:', error);
+    return false;
+  }
+}
+
+export async function createUser(userData: {
+  username: string;
+  email: string;
+  name: string;
+  password: string;
+  role?: string;
+}): Promise<User | null> {
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .insert({
+        username: userData.username,
+        email: userData.email,
+        name: userData.name,
+        password: userData.password,
+        role: userData.role || 'admin'
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error('Error creating user:', error);
+    return null;
+  }
+}
+
+export async function getAllUsers(): Promise<User[]> {
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+    return data || [];
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    return [];
   }
 }
