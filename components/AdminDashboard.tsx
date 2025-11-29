@@ -130,6 +130,9 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
     logo_url: ''
   });
 
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string>('');
+
   // Auto-logout functionality
   const INACTIVITY_TIMEOUT = 60 * 60 * 1000; // 1 hour in milliseconds
 
@@ -529,14 +532,31 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
   const handleTrustedSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      let logoUrl = trustedForm.logo_url;
+
+      // If a new file was uploaded, convert it to base64
+      if (logoFile) {
+        logoUrl = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(logoFile);
+        });
+      }
+
+      const companyData = {
+        name: trustedForm.name,
+        logo_url: logoUrl
+      };
+
       if (editingTrusted) {
-        const updated = await updateTrustedCompany(editingTrusted.id, trustedForm);
+        const updated = await updateTrustedCompany(editingTrusted.id, companyData);
         if (updated) {
           toast.success('Trusted company updated successfully');
           await loadData();
         }
       } else {
-        const added = await addTrustedCompany(trustedForm);
+        const added = await addTrustedCompany(companyData);
         if (added) {
           toast.success('Trusted company added successfully');
           await loadData();
@@ -566,8 +586,33 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
 
   const resetTrustedForm = () => {
     setTrustedForm({ name: '', logo_url: '' });
+    setLogoFile(null);
+    setLogoPreview('');
     setEditingTrusted(null);
     setShowTrustedDialog(false);
+  };
+
+  const handleLogoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        toast.error('Please select an image file');
+        return;
+      }
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('Image size must be less than 5MB');
+        return;
+      }
+      setLogoFile(file);
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setLogoPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const openTrustedDialog = (company?: TrustedCompany) => {
@@ -577,6 +622,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
         name: company.name,
         logo_url: company.logo_url
       });
+      setLogoPreview(company.logo_url);
     } else {
       resetTrustedForm();
     }
@@ -1708,30 +1754,46 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ onLogout }) => {
               />
             </div>
             <div>
-              <label className="text-sm font-medium">Logo URL</label>
-              <Input
-                value={trustedForm.logo_url}
-                onChange={(e) => setTrustedForm(prev => ({ ...prev, logo_url: e.target.value }))}
-                placeholder="https://example.com/logo.png"
-                required
-              />
-              <p className="text-xs text-muted-foreground mt-1">
-                <Upload className="w-3 h-3 inline mr-1" />
-                Enter the URL of the company logo image
-              </p>
+              <label className="text-sm font-medium">Company Logo</label>
+              <div className="mt-2">
+                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-border rounded-lg cursor-pointer bg-muted/30 hover:bg-muted/50 transition-colors">
+                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                    <Upload className="w-10 h-10 mb-3 text-muted-foreground" />
+                    <p className="mb-2 text-sm text-muted-foreground">
+                      <span className="font-semibold">Click to upload</span> or drag and drop
+                    </p>
+                    <p className="text-xs text-muted-foreground">PNG, JPG, SVG (MAX. 5MB)</p>
+                  </div>
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept="image/*"
+                    onChange={handleLogoFileChange}
+                    required={!editingTrusted && !logoPreview}
+                  />
+                </label>
+              </div>
             </div>
-            {trustedForm.logo_url && (
+            {logoPreview && (
               <div>
                 <label className="text-sm font-medium">Logo Preview</label>
-                <div className="mt-2 w-full h-32 flex items-center justify-center bg-muted/30 rounded-lg overflow-hidden border border-border">
+                <div className="mt-2 w-full h-32 flex items-center justify-center bg-muted/30 rounded-lg overflow-hidden border border-border relative">
                   <img
-                    src={trustedForm.logo_url}
+                    src={logoPreview}
                     alt="Logo preview"
                     className="max-w-full max-h-full object-contain"
-                    onError={(e) => {
-                      e.currentTarget.src = 'https://via.placeholder.com/150?text=Invalid+URL';
-                    }}
                   />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLogoFile(null);
+                      setLogoPreview('');
+                      setTrustedForm(prev => ({ ...prev, logo_url: '' }));
+                    }}
+                    className="absolute top-2 right-2 bg-destructive text-destructive-foreground rounded-full p-1 hover:bg-destructive/90"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
                 </div>
               </div>
             )}

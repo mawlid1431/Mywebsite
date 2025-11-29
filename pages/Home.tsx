@@ -156,9 +156,9 @@ export default function Home() {
                     />
                 </div>
 
-                <div className="container mx-auto px-4 py-20 relative z-10">
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 lg:py-20 relative z-10">
                     <div className="max-w-6xl mx-auto">
-                        <div className="grid lg:grid-cols-2 gap-12 items-center">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
                             <motion.div
                                 initial={{ opacity: 0, x: -50 }}
                                 animate={{ opacity: 1, x: 0 }}
@@ -339,7 +339,7 @@ export default function Home() {
                             initial={{ opacity: 0, y: 50 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 1.6, duration: 0.8 }}
-                            className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8"
+                            className="mt-12 md:mt-20 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 lg:gap-8"
                         >
                             {[
                                 { label: 'Projects Completed', value: 15 },
@@ -410,7 +410,7 @@ export default function Home() {
                             </motion.p>
                         </div>
 
-                        <div className="grid md:grid-cols-3 gap-8">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                             {[
                                 {
                                     icon: Code,
@@ -511,7 +511,7 @@ export default function Home() {
                             </motion.p>
                         </div>
 
-                        <div className="grid md:grid-cols-3 gap-10">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10">
                             {projectsLoading ? (
                                 [...Array(3)].map((_, index) => (
                                     <div key={index} className="animate-pulse">
@@ -649,7 +649,7 @@ export default function Home() {
                             </motion.p>
                         </div>
 
-                        <div className="grid md:grid-cols-3 gap-10">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10">
                             {servicesLoading ? (
                                 [...Array(3)].map((_, index) => (
                                     <div key={index} className="animate-pulse">
@@ -928,18 +928,18 @@ export default function Home() {
                                             className="shrink-0"
                                         >
                                             <div className="
-                                                px-12 py-7 rounded-2xl
+                                                px-8 py-5 rounded-2xl
                                                 bg-card/80 
                                                 backdrop-blur-sm
                                                 transition-all duration-300
                                                 hover:bg-card
                                                 flex items-center justify-center
-                                                min-w-[200px] h-[100px]
+                                                min-w-[140px] h-[70px]
                                             ">
                                                 <img
                                                     src={company.logo_url}
                                                     alt={company.name}
-                                                    className="max-w-[180px] max-h-[80px] object-contain opacity-70 hover:opacity-100 transition-opacity duration-300 filter grayscale hover:grayscale-0"
+                                                    className="max-w-[126px] max-h-[56px] object-contain opacity-70 hover:opacity-100 transition-opacity duration-300 filter grayscale hover:grayscale-0"
                                                     onError={(e) => {
                                                         const target = e.currentTarget;
                                                         target.style.display = 'none';

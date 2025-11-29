@@ -265,7 +265,7 @@ export default function Layout({ children, darkMode, setDarkMode, cart = [], onC
                 {children}
             </main>
 
-            <footer className="py-12 border-t border-border/50 bg-card/30 backdrop-blur-sm">
+            <footer className="py-12 border-t border-border bg-card backdrop-blur-sm">
                 <div className="container mx-auto px-4">
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
@@ -284,9 +284,11 @@ export default function Layout({ children, darkMode, setDarkMode, cart = [], onC
                                 <motion.a
                                     key={social.label}
                                     href={social.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     whileHover={{ scale: 1.2, y: -5 }}
                                     whileTap={{ scale: 0.9 }}
-                                    className="w-12 h-12 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full flex items-center justify-center text-muted-foreground hover:text-primary transition-colors shadow-lg"
+                                    className="w-12 h-12 bg-gradient-to-br from-primary/30 to-secondary/30 hover:from-primary/50 hover:to-secondary/50 rounded-full flex items-center justify-center text-foreground hover:text-primary transition-all shadow-lg hover:shadow-xl"
                                 >
                                     <social.icon className="w-6 h-6" />
                                 </motion.a>
@@ -301,21 +303,21 @@ export default function Layout({ children, darkMode, setDarkMode, cart = [], onC
                         >
                             <button
                                 onClick={() => navigate('/faq')}
-                                className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                                className="text-foreground/70 hover:text-primary transition-colors text-sm font-medium"
                             >
                                 FAQ
                             </button>
-                            <span className="text-muted-foreground">•</span>
+                            <span className="text-foreground/50">•</span>
                             <button
                                 onClick={() => navigate('/privacy')}
-                                className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                                className="text-foreground/70 hover:text-primary transition-colors text-sm font-medium"
                             >
                                 Privacy Policy
                             </button>
-                            <span className="text-muted-foreground">•</span>
+                            <span className="text-foreground/50">•</span>
                             <button
                                 onClick={() => navigate('/terms')}
-                                className="text-muted-foreground hover:text-primary transition-colors text-sm"
+                                className="text-foreground/70 hover:text-primary transition-colors text-sm font-medium"
                             >
                                 Terms & Conditions
                             </button>
@@ -325,7 +327,7 @@ export default function Layout({ children, darkMode, setDarkMode, cart = [], onC
                             whileInView={{ opacity: 1 }}
                             transition={{ duration: 0.8, delay: 0.3 }}
                             viewport={{ once: true }}
-                            className="text-muted-foreground text-sm"
+                            className="text-foreground/60 text-sm font-medium"
                         >
                             © 2024 Mowlid Mohamud. Crafted with passion and innovation.
                         </motion.p>
