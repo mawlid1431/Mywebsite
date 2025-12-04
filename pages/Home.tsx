@@ -304,7 +304,7 @@ export default function Home() {
                                             y: { duration: 4, repeat: Infinity, ease: "easeInOut" },
                                             rotateY: { duration: 6, repeat: Infinity, ease: "easeInOut" }
                                         }}
-                                        className="relative w-80 h-80 rounded-full overflow-hidden border-4 border-background shadow-2xl"
+                                        className="relative w-64 h-64 sm:w-72 sm:h-72 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-background shadow-2xl"
                                     >
                                         <img
                                             src={profileImage1}
@@ -315,20 +315,20 @@ export default function Home() {
                                     </motion.div>
 
                                     <FloatingIcon delay={0}>
-                                        <div className="absolute -top-4 -right-4 w-12 h-12 bg-primary rounded-full flex items-center justify-center shadow-lg">
-                                            <Code className="w-6 h-6 text-primary-foreground" />
+                                        <div className="absolute -top-3 -right-3 sm:-top-4 sm:-right-4 w-10 h-10 sm:w-12 sm:h-12 bg-primary rounded-full flex items-center justify-center shadow-lg">
+                                            <Code className="w-5 h-5 sm:w-6 sm:h-6 text-primary-foreground" />
                                         </div>
                                     </FloatingIcon>
 
                                     <FloatingIcon delay={1}>
-                                        <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-secondary rounded-full flex items-center justify-center shadow-lg">
-                                            <Users className="w-6 h-6 text-secondary-foreground" />
+                                        <div className="absolute -bottom-3 -left-3 sm:-bottom-4 sm:-left-4 w-10 h-10 sm:w-12 sm:h-12 bg-secondary rounded-full flex items-center justify-center shadow-lg">
+                                            <Users className="w-5 h-5 sm:w-6 sm:h-6 text-secondary-foreground" />
                                         </div>
                                     </FloatingIcon>
 
                                     <FloatingIcon delay={2}>
-                                        <div className="absolute top-1/2 -right-8 w-10 h-10 bg-accent rounded-full flex items-center justify-center shadow-lg">
-                                            <Globe className="w-5 h-5 text-accent-foreground" />
+                                        <div className="absolute top-1/2 -right-6 sm:-right-8 w-8 h-8 sm:w-10 sm:h-10 bg-accent rounded-full flex items-center justify-center shadow-lg">
+                                            <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-accent-foreground" />
                                         </div>
                                     </FloatingIcon>
                                 </div>
@@ -350,12 +350,12 @@ export default function Home() {
                                 <motion.div
                                     key={stat.label}
                                     whileHover={{ scale: 1.05 }}
-                                    className="text-center p-6 rounded-xl bg-card/50 backdrop-blur-sm border border-border/50"
+                                    className="text-center p-4 sm:p-6 rounded-xl bg-card/50 backdrop-blur-sm border border-border/50"
                                 >
-                                    <div className="text-3xl text-primary mb-2">
+                                    <div className="text-2xl sm:text-3xl text-primary mb-2">
                                         <AnimatedCounter value={stat.value} />
                                     </div>
-                                    <div className="text-sm text-muted-foreground">{stat.label}</div>
+                                    <div className="text-xs sm:text-sm text-muted-foreground">{stat.label}</div>
                                 </motion.div>
                             ))}
                         </motion.div>
@@ -619,7 +619,7 @@ export default function Home() {
             </section>
 
             {/* Services Preview Section */}
-            <section className="py-24 relative">
+            <section className="py-20 relative">
                 <div className="container mx-auto px-4">
                     <motion.div
                         initial={{ opacity: 0, y: 50 }}
@@ -628,13 +628,13 @@ export default function Home() {
                         viewport={{ once: true }}
                         className="max-w-6xl mx-auto"
                     >
-                        <div className="text-center mb-12">
+                        <div className="text-center mb-16">
                             <motion.h2
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8 }}
                                 viewport={{ once: true }}
-                                className="text-4xl md:text-5xl mb-8 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
+                                className="text-3xl md:text-4xl mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
                             >
                                 Services & Solutions
                             </motion.h2>
@@ -643,70 +643,66 @@ export default function Home() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, delay: 0.2 }}
                                 viewport={{ once: true }}
-                                className="text-xl text-muted-foreground max-w-3xl mx-auto mb-4"
+                                className="text-base text-muted-foreground max-w-2xl mx-auto"
                             >
                                 Professional services designed to elevate your digital presence
                             </motion.p>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 max-w-4xl mx-auto">
                             {servicesLoading ? (
                                 [...Array(3)].map((_, index) => (
                                     <div key={index} className="animate-pulse">
-                                        <Card className="border-border/50 bg-card/50 backdrop-blur-sm h-full">
-                                            <CardHeader>
-                                                <div className="h-6 bg-gray-200 rounded w-20 mb-4"></div>
-                                                <div className="h-6 bg-gray-200 rounded w-3/4 mb-2"></div>
-                                            </CardHeader>
-                                        </Card>
+                                        <div className="border border-border/50 bg-card/50 backdrop-blur-sm rounded-lg p-4 h-full">
+                                            <div className="h-4 bg-gray-200 rounded w-16 mb-3"></div>
+                                            <div className="h-5 bg-gray-200 rounded w-3/4 mb-2"></div>
+                                            <div className="h-3 bg-gray-200 rounded w-full mb-1"></div>
+                                        </div>
                                     </div>
                                 ))
                             ) : services.slice(0, 3).map((service, index) => (
                                 <motion.div
                                     key={service.id}
-                                    initial={{ opacity: 0, y: 50 }}
+                                    initial={{ opacity: 0, y: 30 }}
                                     whileInView={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.8, delay: index * 0.1 }}
-                                    whileHover={{ y: -10, scale: 1.02 }}
+                                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                                    whileHover={{ y: -5 }}
                                     viewport={{ once: true }}
                                     className="cursor-pointer"
                                     onClick={() => navigate('/services')}
                                 >
-                                    <Card className="border-border/50 bg-card/50 backdrop-blur-sm overflow-hidden group h-full hover:border-primary/50 transition-colors">
-                                        <CardHeader>
-                                            <div className="flex justify-between items-start mb-4">
-                                                <Badge
-                                                    variant="secondary"
-                                                    className="bg-primary/10 text-primary border-primary/20"
-                                                >
-                                                    {service.category}
-                                                </Badge>
-                                                <motion.div
-                                                    whileHover={{ scale: 1.2, rotate: 15 }}
-                                                    className="w-8 h-8 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center"
-                                                >
-                                                    <Star className="w-4 h-4 text-white" />
-                                                </motion.div>
-                                            </div>
-                                            <CardTitle className="group-hover:text-primary transition-colors">
-                                                {service.title}
-                                            </CardTitle>
-                                            <CardDescription className="leading-relaxed line-clamp-3">
-                                                {service.description}
-                                            </CardDescription>
-                                        </CardHeader>
-
-                                        <CardContent>
-                                            <motion.div
-                                                className="text-2xl mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
-                                                whileHover={{ scale: 1.1 }}
+                                    <div className="relative border border-border/50 bg-card/50 backdrop-blur-sm rounded-lg overflow-hidden group hover:border-primary/40 hover:shadow-md transition-all duration-300 p-4">
+                                        <div className="flex items-start justify-between mb-3">
+                                            <Badge
+                                                variant="secondary"
+                                                className="bg-primary/10 text-primary border-primary/20 text-xs px-2 py-0.5"
                                             >
-                                                {service.price}
+                                                {service.category}
+                                            </Badge>
+                                            <motion.div
+                                                whileHover={{ rotate: 15 }}
+                                                className="w-6 h-6 bg-gradient-to-br from-primary to-secondary rounded-md flex items-center justify-center shadow-sm"
+                                            >
+                                                <Star className="w-3 h-3 text-white" />
                                             </motion.div>
-                                        </CardContent>
+                                        </div>
+
+                                        <h3 className="text-base font-semibold mb-2 group-hover:text-primary transition-colors line-clamp-1">
+                                            {service.title}
+                                        </h3>
+
+                                        <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2 mb-3 min-h-[2.5rem]">
+                                            {service.description}
+                                        </p>
+
+                                        <div className="flex items-center justify-center pt-2 border-t border-border/30">
+                                            <span className="text-xs font-medium bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                                                {service.price}
+                                            </span>
+                                        </div>
 
                                         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                                    </Card>
+                                    </div>
                                 </motion.div>
                             ))}
                         </div>
@@ -716,7 +712,7 @@ export default function Home() {
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.4 }}
                             viewport={{ once: true }}
-                            className="text-center mt-20 mb-8"
+                            className="text-center mt-20"
                         >
                             <Button
                                 size="lg"
@@ -876,91 +872,7 @@ export default function Home() {
                 )}
             </section>
 
-            {/* Trusted Companies Section */}
-            <section className="py-16 bg-background relative overflow-hidden">
-                <div className="container mx-auto px-4 mb-16">
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8 }}
-                        viewport={{ once: true }}
-                        className="text-center"
-                    >
-                        <h2 className="text-2xl md:text-3xl mb-4 text-foreground font-semibold">Trusted By</h2>
-                        <p className="text-muted-foreground text-sm">Companies that believe in quality</p>
-                    </motion.div>
-                </div>
 
-                {companiesLoading ? (
-                    <div className="text-center py-12">
-                        <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent mx-auto"></div>
-                        <p className="text-muted-foreground mt-4">Loading trusted companies...</p>
-                    </div>
-                ) : trustedCompanies.length === 0 ? (
-                    <div className="text-center py-12">
-                        <p className="text-muted-foreground">No trusted companies yet</p>
-                    </div>
-                ) : (
-                    <div className="relative">
-                        <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10" />
-                        <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10" />
-
-                        <motion.div
-                            className="flex gap-8 items-center py-6"
-                            animate={{
-                                x: ["0%", "-50%"],
-                            }}
-                            transition={{
-                                x: {
-                                    repeat: Infinity,
-                                    repeatType: "loop",
-                                    duration: 30,
-                                    ease: "linear",
-                                },
-                            }}
-                            style={{ willChange: "transform" }}
-                        >
-                            {[...Array(4)].map((_, setIndex) => (
-                                <div key={setIndex} className="flex gap-8 items-center shrink-0">
-                                    {trustedCompanies.map((company) => (
-                                        <div
-                                            key={`${setIndex}-${company.id}`}
-                                            className="shrink-0"
-                                        >
-                                            <div className="
-                                                px-8 py-5 rounded-2xl
-                                                bg-card/80 
-                                                backdrop-blur-sm
-                                                transition-all duration-300
-                                                hover:bg-card
-                                                flex items-center justify-center
-                                                min-w-[140px] h-[70px]
-                                            ">
-                                                <img
-                                                    src={company.logo_url}
-                                                    alt={company.name}
-                                                    className="max-w-[126px] max-h-[56px] object-contain opacity-70 hover:opacity-100 transition-opacity duration-300 filter grayscale hover:grayscale-0"
-                                                    onError={(e) => {
-                                                        const target = e.currentTarget;
-                                                        target.style.display = 'none';
-                                                        const parent = target.parentElement;
-                                                        if (parent && !parent.querySelector('.fallback-text')) {
-                                                            const textDiv = document.createElement('div');
-                                                            textDiv.className = 'fallback-text text-xl font-semibold text-muted-foreground whitespace-nowrap';
-                                                            textDiv.textContent = company.name;
-                                                            parent.appendChild(textDiv);
-                                                        }
-                                                    }}
-                                                />
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            ))}
-                        </motion.div>
-                    </div>
-                )}
-            </section>
         </div>
     );
 }

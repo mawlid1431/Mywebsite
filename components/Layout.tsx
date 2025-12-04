@@ -46,11 +46,9 @@ export default function Layout({ children, darkMode, setDarkMode, cart = [], onC
     }, [mobileMenuOpen]);
 
     const navItems = [
-        { name: 'Home', path: '/' },
         { name: 'About', path: '/about' },
         { name: 'Projects', path: '/projects' },
         { name: 'Services', path: '/services' },
-        { name: 'Testimonials', path: '/testimonials' },
         { name: 'Contact', path: '/contact' }
     ];
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Toaster } from 'sonner';
 import { AnimatePresence } from 'framer-motion';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './components/ui/dialog';
@@ -8,6 +8,17 @@ import { Button } from './components/ui/button';
 import { Separator } from './components/ui/separator';
 import { Plus, Minus, Trash2, MessageCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
+
+// Scroll to top component
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 
 // Pages
 import Home from './pages/Home';
@@ -98,6 +109,7 @@ const AppRouter: React.FC = () => {
 
   return (
     <Router>
+      <ScrollToTop />
       <Toaster />
       <Routes>
         {/* Main portfolio routes with Layout */}
