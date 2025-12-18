@@ -1,11 +1,15 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../components/ui/card';
 import { Badge } from '../components/ui/badge';
+import { Input } from '../components/ui/input';
+import { Textarea } from '../components/ui/textarea';
+import { Label } from '../components/ui/label';
 import { getServices } from '../utils/supabase/database';
 import { Service as DbService } from '../utils/supabase/client';
-import { Star, ShoppingCart, ArrowRight } from 'lucide-react';
+import { Star, ArrowRight, X, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface Service {
@@ -20,9 +24,25 @@ interface ServicesProps {
     onAddToCart?: (service: Service) => void;
 }
 
+interface BookingForm {
+    name: string;
+    email: string;
+    phone: string;
+    message: string;
+}
+
 export default function Services({ onAddToCart }: ServicesProps) {
+    const navigate = useNavigate();
     const [dbServices, setDbServices] = useState<DbService[]>([]);
     const [servicesLoading, setServicesLoading] = useState(true);
+    const [selectedService, setSelectedService] = useState<Service | null>(null);
+    const [showBookingForm, setShowBookingForm] = useState(false);
+    const [bookingForm, setBookingForm] = useState<BookingForm>({
+        name: '',
+        email: '',
+        phone: '',
+        message: ''
+    });
 
     useEffect(() => {
         const loadServices = async () => {
@@ -47,11 +67,60 @@ export default function Services({ onAddToCart }: ServicesProps) {
         category: 'Service'
     }));
 
-    const handleAddToCart = (service: Service) => {
-        if (onAddToCart) {
-            onAddToCart(service);
+    const handleBookService = (service: Service) => {
+        setSelectedService(service);
+        setShowBookingForm(true);
+    };
+
+    const handleCloseBookingForm = () => {
+        setShowBookingForm(false);
+        setSelectedService(null);
+        setBookingForm({
+            name: '',
+            email: '',
+            phone: '',
+            message: ''
+        });
+    };
+
+    const handleSubmitBooking = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        // Validate form
+        if (!bookingForm.name || !bookingForm.email || !bookingForm.phone) {
+            toast.error('Please fill in all required fields');
+            return;
         }
-        toast.success('Added to cart!');
+
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(bookingForm.email)) {
+            toast.error('Please enter a valid email address');
+            return;
+        }
+
+        // Store booking data and navigate to contact page
+        const bookingData = {
+            service: selectedService,
+            ...bookingForm
+        };
+
+        // Store in sessionStorage so it can be accessed on the contact page
+        sessionStorage.setItem('bookingData', JSON.stringify(bookingData));
+
+        toast.success(`Redirecting to contact page...`);
+
+        // Navigate to contact page
+        setTimeout(() => {
+            navigate('/contact');
+        }, 500);
+    };
+
+    const handleInputChange = (field: keyof BookingForm, value: string) => {
+        setBookingForm(prev => ({
+            ...prev,
+            [field]: value
+        }));
     };
 
     return (
@@ -150,11 +219,11 @@ export default function Services({ onAddToCart }: ServicesProps) {
                                                     className="w-full"
                                                 >
                                                     <Button
-                                                        onClick={() => handleAddToCart(service)}
+                                                        onClick={() => handleBookService(service)}
                                                         className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary group"
                                                     >
-                                                        <ShoppingCart className="w-4 h-4 mr-2" />
-                                                        Add to Cart
+                                                        <Calendar className="w-4 h-4 mr-2" />
+                                                        Book Now
                                                         <motion.div
                                                             className="ml-auto opacity-0 group-hover:opacity-100"
                                                             animate={{ x: [0, 5, 0] }}
@@ -179,6 +248,123 @@ export default function Services({ onAddToCart }: ServicesProps) {
                     </motion.div>
                 </div>
             </section>
+
+            {/* Booking Form Modal */}
+            <AnimatePresence>
+                {showBookingForm && selectedService && (
+                    <>
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+                            onClick={handleCloseBookingForm}
+                        />
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            transition={{ type: "spring", duration: 0.5 }}
+                            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+                        >
+                            <Card className="w-full max-w-lg bg-background border-border shadow-2xl">
+                                <CardHeader className="relative">
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        onClick={handleCloseBookingForm}
+                                        className="absolute right-4 top-4 text-muted-foreground hover:text-foreground"
+                                    >
+                                        <X className="h-4 w-4" />
+                                    </Button>
+                                    <CardTitle className="text-2xl bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                                        Book {selectedService.title}
+                                    </CardTitle>
+                                    <CardDescription>
+                                        Fill in your details and we'll get back to you shortly
+                                    </CardDescription>
+                                    <div className="mt-2 text-lg font-semibold text-primary">
+                                        {selectedService.price}
+                                    </div>
+                                </CardHeader>
+                                <form onSubmit={handleSubmitBooking}>
+                                    <CardContent className="space-y-4">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="name">
+                                                Name <span className="text-destructive">*</span>
+                                            </Label>
+                                            <Input
+                                                id="name"
+                                                placeholder="Your full name"
+                                                value={bookingForm.name}
+                                                onChange={(e) => handleInputChange('name', e.target.value)}
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label htmlFor="email">
+                                                Email <span className="text-destructive">*</span>
+                                            </Label>
+                                            <Input
+                                                id="email"
+                                                type="email"
+                                                placeholder="your.email@example.com"
+                                                value={bookingForm.email}
+                                                onChange={(e) => handleInputChange('email', e.target.value)}
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label htmlFor="phone">
+                                                Phone Number <span className="text-destructive">*</span>
+                                            </Label>
+                                            <Input
+                                                id="phone"
+                                                type="tel"
+                                                placeholder="+1 (555) 000-0000"
+                                                value={bookingForm.phone}
+                                                onChange={(e) => handleInputChange('phone', e.target.value)}
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className="space-y-2">
+                                            <Label htmlFor="message">
+                                                Message (Optional)
+                                            </Label>
+                                            <Textarea
+                                                id="message"
+                                                placeholder="Tell us about your project or any specific requirements..."
+                                                value={bookingForm.message}
+                                                onChange={(e) => handleInputChange('message', e.target.value)}
+                                                rows={4}
+                                            />
+                                        </div>
+                                    </CardContent>
+                                    <CardFooter className="flex gap-3">
+                                        <Button
+                                            type="button"
+                                            variant="outline"
+                                            onClick={handleCloseBookingForm}
+                                            className="flex-1"
+                                        >
+                                            Cancel
+                                        </Button>
+                                        <Button
+                                            type="submit"
+                                            className="flex-1 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary"
+                                        >
+                                            Submit Booking
+                                        </Button>
+                                    </CardFooter>
+                                </form>
+                            </Card>
+                        </motion.div>
+                    </>
+                )}
+            </AnimatePresence>
         </div>
     );
 }

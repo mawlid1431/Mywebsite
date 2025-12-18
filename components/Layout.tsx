@@ -4,7 +4,7 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
-    Moon, Sun, User, ShoppingCart, Menu, X, Github, Linkedin, Mail, Instagram
+    Moon, Sun, Menu, X, Github, Linkedin, Mail, Instagram
 } from 'lucide-react';
 
 interface LayoutProps {
@@ -133,41 +133,7 @@ export default function Layout({ children, darkMode, setDarkMode, cart = [], onC
                                 </Button>
                             </motion.div>
 
-                            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="hidden sm:block">
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    onClick={() => navigate('/admin')}
-                                    className="relative text-foreground hover:text-primary hover:bg-muted"
-                                    title="Admin Login"
-                                >
-                                    <User className="h-4 w-4" />
-                                </Button>
-                            </motion.div>
 
-                            {onCartClick && (
-                                <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }} className="hidden sm:block">
-                                    <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        onClick={onCartClick}
-                                        className="relative text-foreground hover:text-primary hover:bg-muted"
-                                    >
-                                        <ShoppingCart className="h-4 w-4" />
-                                        {cart.length > 0 && (
-                                            <motion.div
-                                                initial={{ scale: 0 }}
-                                                animate={{ scale: 1 }}
-                                                className="absolute -top-2 -right-2"
-                                            >
-                                                <Badge className="h-5 w-5 rounded-full p-0 flex items-center justify-center bg-primary text-primary-foreground">
-                                                    {cart.reduce((sum, item) => sum + item.quantity, 0)}
-                                                </Badge>
-                                            </motion.div>
-                                        )}
-                                    </Button>
-                                </motion.div>
-                            )}
                         </div>
                     </div>
                 </div>
@@ -222,38 +188,7 @@ export default function Layout({ children, darkMode, setDarkMode, cart = [], onC
                                 ))}
                             </nav>
 
-                            <div className="mt-auto space-y-4">
-                                <Button
-                                    variant="outline"
-                                    onClick={() => {
-                                        navigate('/admin');
-                                        setMobileMenuOpen(false);
-                                    }}
-                                    className="w-full justify-start"
-                                >
-                                    <User className="h-4 w-4 mr-2" />
-                                    Admin Login
-                                </Button>
 
-                                {onCartClick && (
-                                    <Button
-                                        variant="outline"
-                                        onClick={() => {
-                                            onCartClick();
-                                            setMobileMenuOpen(false);
-                                        }}
-                                        className="w-full justify-start relative"
-                                    >
-                                        <ShoppingCart className="h-4 w-4 mr-2" />
-                                        Cart
-                                        {cart.length > 0 && (
-                                            <Badge className="ml-auto h-5 w-5 rounded-full p-0 flex items-center justify-center bg-primary text-primary-foreground">
-                                                {cart.reduce((sum, item) => sum + item.quantity, 0)}
-                                            </Badge>
-                                        )}
-                                    </Button>
-                                )}
-                            </div>
                         </div>
                     </motion.div>
                 </>

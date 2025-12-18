@@ -26,7 +26,6 @@ import About from './pages/About';
 import Projects from './pages/Projects';
 import Services from './pages/Services';
 import Contact from './pages/Contact';
-import Testimonials from './pages/Testimonials';
 import FAQ from './pages/FAQ';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
@@ -140,12 +139,6 @@ const AppRouter: React.FC = () => {
         <Route path="/contact" element={
           <Layout darkMode={darkMode} setDarkMode={setDarkMode} cart={cart} onCartClick={() => setShowCart(true)}>
             <Contact />
-          </Layout>
-        } />
-
-        <Route path="/testimonials" element={
-          <Layout darkMode={darkMode} setDarkMode={setDarkMode} cart={cart} onCartClick={() => setShowCart(true)}>
-            <Testimonials />
           </Layout>
         } />
 

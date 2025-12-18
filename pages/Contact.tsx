@@ -1,14 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Textarea } from '../components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { MapPin, Mail, Phone, ArrowRight } from 'lucide-react';
+import { Badge } from '../components/ui/badge';
+import { MapPin, Mail, Phone, ArrowRight, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function Contact() {
     const [contactForm, setContactForm] = useState({ name: '', email: '', phone: '', message: '' });
+    const [bookingInfo, setBookingInfo] = useState<any>(null);
+
+    useEffect(() => {
+        // Check if there's booking data from the services page
+        const bookingData = sessionStorage.getItem('bookingData');
+        if (bookingData) {
+            try {
+                const data = JSON.parse(bookingData);
+                setBookingInfo(data);
+
+                // Pre-fill the contact form with booking data
+                setContactForm({
+                    name: data.name || '',
+                    email: data.email || '',
+                    phone: data.phone || '',
+                    message: data.message
+                        ? `Service Booking: ${data.service?.title}\n\n${data.message}`
+                        : `I would like to book the following service: ${data.service?.title}\n\nPrice: ${data.service?.price}\n\nPlease contact me to discuss the details.`
+                });
+
+                // Clear the session storage
+                sessionStorage.removeItem('bookingData');
+
+                toast.success('Booking information loaded! Please review and submit.');
+            } catch (error) {
+                console.error('Error parsing booking data:', error);
+            }
+        }
+    }, []);
 
     const handleContactSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -130,10 +160,34 @@ export default function Contact() {
                             >
                                 <Card className="border-border/50 bg-card/50 backdrop-blur-sm">
                                     <CardHeader>
-                                        <CardTitle>Send a Message</CardTitle>
-                                        <CardDescription>
-                                            Fill out the form below and I'll get back to you within 24 hours
-                                        </CardDescription>
+                                        <div className="flex items-center justify-between">
+                                            <div>
+                                                <CardTitle>Send a Message</CardTitle>
+                                                <CardDescription>
+                                                    Fill out the form below and I'll get back to you within 24 hours
+                                                </CardDescription>
+                                            </div>
+                                            {bookingInfo && (
+                                                <Badge className="bg-gradient-to-r from-primary to-secondary">
+                                                    <Calendar className="w-3 h-3 mr-1" />
+                                                    Booking
+                                                </Badge>
+                                            )}
+                                        </div>
+                                        {bookingInfo && (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: -10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                className="mt-4 p-3 bg-primary/10 border border-primary/20 rounded-lg"
+                                            >
+                                                <p className="text-sm font-medium text-primary">
+                                                    Service: {bookingInfo.service?.title}
+                                                </p>
+                                                <p className="text-xs text-muted-foreground mt-1">
+                                                    {bookingInfo.service?.price}
+                                                </p>
+                                            </motion.div>
+                                        )}
                                     </CardHeader>
                                     <CardContent>
                                         <form onSubmit={handleContactSubmit} className="space-y-6">
